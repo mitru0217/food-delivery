@@ -123,6 +123,7 @@ const PaymentForm = () => {
           type="text"
           //        value={securityCode}
           onChange={handleSecurityCode}
+          
           placeholder="CVV"
         />
         {(methods.formState.errors.card || methods.formState.errors.date) && (

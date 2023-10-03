@@ -90,7 +90,7 @@ const CreditCard = ({
                   {cardNumber.replace(
                     /(.{4})/g,
                     '$1 '
-                  ) /* Разбиваем номер карты на блоки по 4 цифры с пробелами */ ||
+                  ).slice(0, 19) /* Разбиваем номер карты на блоки по 4 цифры с пробелами */ ||
                     'xxxx xxxx xxxx xxxx'}
                 </CardNumber>
                 <NameText>cardholder name</NameText>
