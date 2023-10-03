@@ -1,6 +1,7 @@
 .history/
 .env
 .env.local
+.comments
 # Logs
 logs
 *.log

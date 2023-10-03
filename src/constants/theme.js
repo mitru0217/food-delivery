@@ -7,6 +7,13 @@ export const theme = {
   colors: {
     mainWhite: '#FFFFFF',
     mainGrey: '#7E7E7E',
+    mainGreen: '#254000',
     primaryBtn: '#5646a3',
+    btnHover: '#0056b3',
+    secondaryBtn: '#007bff',
+    error: '#fc0303',
+  },
+  radii: {
+    btnStandart: '0.8rem',
   },
 };

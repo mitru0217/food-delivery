@@ -1,15 +1,23 @@
+import { Route, Routes } from 'react-router-dom';
+import { lazy } from 'react';
+import { Suspense } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from './components/GlobalStyle';
-// import { lazy } from 'react';
-// import { Route, Routes } from 'react-router-dom';
 import { theme } from './constants/theme';
-// const WelComePage = lazy(() => import('./pages/wellComePage'));
-import WelComePage from './pages/wellComePage';
+import Loader from './components/Loader/Loader';
+const WelComePage = lazy(() => import('./pages/wellComePage'));
+const HomePage = lazy(() => import('./pages/homePage'));
+
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <WelComePage />
+      <Suspense fallback={<Loader />}>
+        <Routes>
+          <Route path="/" element={<WelComePage />} />
+          <Route path="/home" element={<HomePage />} />
+        </Routes>
+      </Suspense>
     </ThemeProvider>
   );
 };

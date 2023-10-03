@@ -1,8 +1,11 @@
+import { useNavigate } from 'react-router-dom';
 import { Container } from './WelComePage.styled';
 import PrimaryButton from '../../components/Buttons/PrimaryButton';
+
 const WelComePage = () => {
+  const navigate = useNavigate();
   const handleClick = () => {
-    console.log('Button clicked!');
+    navigate('/home');
   };
   return (
     <Container>

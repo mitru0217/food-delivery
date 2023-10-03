@@ -11,12 +11,10 @@ export const Button = styled.button`
   background: ${p => p.theme.colors.primaryBtn};
   font-size: 1.4rem;
   padding: 1.6rem 3.2rem;
-  cursor: pointer;
-  border-radius: 0.8rem;
-  border: none;
-  outline: none;
+  border-radius: ${p => p.theme.radii.btnStandart};
+
   &:hover {
-    background-color: #0056b3;
+    background-color: ${p => p.theme.colors.btnHover};
   }
   &:active {
     outline: none;
