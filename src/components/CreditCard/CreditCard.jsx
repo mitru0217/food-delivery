@@ -27,7 +27,7 @@ import {
 const CreditCard = ({
   name,
   cardNumber,
-  expiration,
+  expirityDate,
   securityCode,
   cardType,
   // isFront,
@@ -95,8 +95,8 @@ const CreditCard = ({
                 </CardNumber>
                 <NameText>cardholder name</NameText>
                 <Name>{name || 'Your name'}</Name>
-                <Expiration>expiration</Expiration>
-                <ExpirationDate>{expiration || 'month/year'}</ExpirationDate>
+                <Expiration>Expirity Date </Expiration>
+                <ExpirationDate>{expirityDate || 'month/year'}</ExpirationDate>
               </Down>
             </Front>
           ) : null}

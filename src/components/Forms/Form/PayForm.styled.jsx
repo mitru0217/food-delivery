@@ -3,26 +3,20 @@ import TextField from '@material-ui/core/TextField';
 import FormControl from '@mui/material/FormControl';
 import { width } from 'styled-system';
 
-// const StyledFormControl = styled(FormControl)`
-//   width: 300px;
 
-//   @media screen and (max-width: 600px) {
-//     width: 100%; /* На экранах меньше 600px, ширина будет 100% */
-//   }
-// `;
 
 const CustomTextField = ({ name, error, helperText, label, ...props }) => {
   const id = error ? 'standard-error-helper-text' : 'standard-search';
 
   return (
-    <FormControl sx={width: 100}>
+    <FormControl>
       <TextField
-        fullWidth
+        // fullWidth
         id={id}
         label={
           <span
             style={{
-              fontSize: error ? '15px' : '20px',
+              fontSize: error ? '10px' : '15px',
             }}
           >
             {label || (error ? 'Error' : 'Search Field')}
