@@ -1,6 +1,6 @@
-import { useState } from 'react';
+
+import PropTypes from 'prop-types';
 import {
-  Title,
   Container,
   Card,
   Front,
@@ -22,17 +22,21 @@ import {
   CodeWrapper,
   Cvv,
   CardIcon,
+  ChipIcon,
 } from './CreditCard.styled';
+import cardImages from '../Utils/cardImages';
+import imgChip from '../../assets/icons/chip.svg';
 
 const CreditCard = ({
-  name,
+  cardHolderName,
   cardNumber,
-  expirityDate,
+  expiryDate,
   securityCode,
   cardType,
-  // isFront,
+  isFront,
+  toggleCard
 }) => {
-  const [isFront, setIsFront] = useState(true);
+
 
   let bgColorUp = '#bdbdbd';
   let bgColorDown = '#616161';
@@ -56,25 +60,24 @@ const CreditCard = ({
       break;
   }
 
-  const toggleCard = () => {
-    setIsFront(!isFront);
-  };
-
   return (
     <>
       <Container>
-        <Title>Payment Information</Title>
         <Card isFlipped={!isFront} onClick={toggleCard}>
           {isFront ? (
             <Front>
               <Up style={{ backgroundColor: bgColorUp }}>
-                <Chip />
+                <Chip>
+                <ChipIcon src={imgChip} alt="chip" width="60" height="40" />
+                </Chip>
+
                 {cardType && (
                   <CardIcon
-                    src={`../../assets/${cardType}.svg`}
+                    src={cardImages[cardType]} 
                     alt={cardType}
                     width="60"
                     height="40"
+                    
                   />
                 )}
               </Up>
@@ -87,16 +90,20 @@ const CreditCard = ({
                 </Wave>
                 <NumberText>card number</NumberText>
                 <CardNumber>
-                  {cardNumber.replace(
-                    /(.{4})/g,
-                    '$1 '
-                  ).slice(0, 19) /* Разбиваем номер карты на блоки по 4 цифры с пробелами */ ||
+                  {cardNumber
+                    .replace(/(.{4})/g, '$1 ')
+                    .slice(
+                      0,
+                      19
+                    ) /* Разбиваем номер карты на блоки по 4 цифры с пробелами */ ||
                     'xxxx xxxx xxxx xxxx'}
                 </CardNumber>
                 <NameText>cardholder name</NameText>
-                <Name>{name || 'Your name'}</Name>
-                <Expiration>Expirity Date </Expiration>
-                <ExpirationDate>{expirityDate || 'month/year'}</ExpirationDate>
+                <Name>{cardHolderName || 'Your name'}</Name>
+                <Expiration>Expiry Date </Expiration>
+                <ExpirationDate>{expiryDate .replace(/\D/g, '')
+                  .slice(0, 4)
+                  .replace(/(\d{2})(\d{2})/, '$1/$2') || 'month/year'}</ExpirationDate>
               </Down>
             </Front>
           ) : null}
@@ -106,7 +113,7 @@ const CreditCard = ({
               <Strip />
               <Wrapper>
                 <WrapperName>
-                  <BackName>{name || 'Your Name'}</BackName>``
+                  <BackName>{cardHolderName || 'Your Name'}</BackName>``
                 </WrapperName>
                 <CodeWrapper>
                   <Cvv>{securityCode || 'CVV'}</Cvv>
@@ -119,5 +126,13 @@ const CreditCard = ({
     </>
   );
 };
-
+CreditCard.propTypes = {
+  cardHolderName: PropTypes.string.isRequired,
+  cardNumber: PropTypes.string.isRequired,
+  expiryDate: PropTypes.string.isRequired,
+  securityCode: PropTypes.string.isRequired,
+  cardType: PropTypes.string,
+  isFront: PropTypes.bool.isRequired,
+  toggleCard: PropTypes.func.isRequired,
+};
 export default CreditCard;

@@ -1,14 +1,20 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { CartWrapper } from './ShoppingCart.styled';
+import { ButtonWrapper, CartWrapper} from './ShoppingCart.styled';
 import AddressForm from '../Forms/Checkout/AddressForm';
-// import PaymentForm from '../Forms/Checkout/PaymentForm';
 import OrderForm from '../Forms/Checkout/OrderForm/OrderForm';
-import PaymentForm from '../Forms/Form/PayForm';
+import PaymentForm from '../Forms/Checkout/PaymentForm/PaymentForm';
+import SecondaryButton from '../Buttons/SecondaryButton/SecondaryButton';
+import renderProgressBar from '../ProgressBar/ProgressBar';
+
 const ShoppingCart = ({ isOpen }) => {
+  const [addressInfo, setAddressInfo] = useState({});
+  const [paymentInfo, setPaymentInfo] = useState({});
+
   const [step, setStep] = useState(1);
-  if (!isOpen) return null; //See comments 1.item
+
+  if (!isOpen) return null;
 
   const nextStep = () => {
     setStep(step + 1);
@@ -17,14 +23,24 @@ const ShoppingCart = ({ isOpen }) => {
   const prevStep = () => {
     setStep(step - 1);
   };
+
   const renderForm = () => {
     switch (step) {
       case 1:
-        return <AddressForm />;
+        return (
+          <div style={{ display: step === 1 ? 'block' : 'none' }}>
+          <AddressForm data={addressInfo} updateData={setAddressInfo} />
+        </div>
+        
+        );
       case 2:
-        return <PaymentForm />;
+        return (
+          <div style={{ display: step === 2 ? 'block' : 'none' }}>
+        <PaymentForm data={paymentInfo} updateData={setPaymentInfo}/>
+        </div>
+        );
       case 3:
-        return <OrderForm />;
+        return <OrderForm  addressData={addressInfo} paymentData={paymentInfo} />;
       default:
         return null;
     }
@@ -32,11 +48,12 @@ const ShoppingCart = ({ isOpen }) => {
 
   return (
     <CartWrapper>
-      {renderForm()}
-      <div className="buttons">
-        {step > 1 && <button onClick={prevStep}>Previous</button>}
-        {step < 3 && <button onClick={nextStep}>Next</button>}
-      </div>
+      {renderProgressBar(step)}
+        {renderForm()}
+      <ButtonWrapper>
+        {step > 1 && <SecondaryButton onClick={prevStep}>Previous</SecondaryButton>}
+        {step < 3 && <SecondaryButton onClick={nextStep}>Next</SecondaryButton>}
+      </ButtonWrapper>
     </CartWrapper>
   );
 };

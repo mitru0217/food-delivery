@@ -1,8 +1,7 @@
+
 import styled from 'styled-components';
 
-export const Title = styled.h1`
-  text-align: center;
-`;
+
 
 export const Container = styled.div`
   display: flex;
@@ -38,6 +37,7 @@ export const Front = styled(CardInner)`
   border-radius: 22px;
   color: #ffffff;
   transform: rotateY(0deg);
+
 `;
 export const Back = styled(CardInner)`
   position: relative;
@@ -50,6 +50,7 @@ export const Back = styled(CardInner)`
   background-color: #616161;
   transform: rotateY(180deg);
   padding-top: 3.5rem;
+
 `;
 
 export const Up = styled.div`
@@ -72,11 +73,16 @@ export const Down = styled.div`
 export const Chip = styled.div`
   width: 5rem;
   height: 3.5rem;
-  border: 1px solid black;
   border-radius: 10px;
-  background-image: url('../../assets/CcIcons/vecteezy_credit-card-chip_11843770.svg');
-  background-size: cover;
+  align-items: center;
 `;
+
+export const ChipIcon = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
+
 export const Wave = styled.svg`
   position: absolute;
   left: 0;
@@ -94,7 +100,7 @@ export const NumberText = styled.span`
 export const NameText = styled.span`
   position: absolute;
   font-weight: 500;
-  font-size: 1.5rem;
+ font-size: 1.5rem;
   top: 68%;
   z-index: 4;
 `;
@@ -105,6 +111,7 @@ export const CardNumber = styled.span`
   font-weight: 500;
   font-size: 3.75rem;
   z-index: 4;
+ 
 `;
 export const Name = styled.span`
   position: absolute;
@@ -114,6 +121,7 @@ export const Name = styled.span`
   font-size: 2.5rem;
   text-transform: uppercase;
   z-index: 4;
+ 
 `;
 export const Expiration = styled(NameText)`
   right: 10%;
@@ -123,7 +131,8 @@ export const ExpirationDate = styled.span`
   z-index: 4;
   top: 76%;
   right: 10%;
-  font-size: 2.5rem;
+ font-size: 2.5rem;
+
 `;
 export const Strip = styled.div`
   width: 100%;
@@ -161,19 +170,6 @@ export const Cvv = styled.span`
   color: black;
 `;
 
-// export const FormContainer = styled.div`
-//   display: grid;
-//   grid-column-gap: 1rem;
-//   grid-template-columns: auto auto;
-//   grid-template-rows: 8rem 8rem 8rem;
-//   max-width: 40rem;
-//   padding: 2rem;
-//   color: #707070;
-// `;
-// export const FieldContainer = styled.div`
-//   position: relative;
-// `;
-
 export const Label = styled.div`
   padding-bottom: 0.5rem;
   font-size: 1.3rem;
@@ -192,9 +188,8 @@ export const CardIcon = styled.img`
   position: absolute;
   right: 12%;
   top: 12%;
-
   z-index: 4;
-  border: 1px solid black;
+  
 `;
 export const RandomButton = styled.button`
   width: auto;

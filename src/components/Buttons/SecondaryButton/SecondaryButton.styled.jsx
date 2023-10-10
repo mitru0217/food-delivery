@@ -5,7 +5,7 @@ export const ButtonStyled = styled.button`
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  width: 7rem;
+  width: 5rem;
   padding: 1rem 1rem;
   font-size: 1.1rem;
   color: ${p => p.theme.colors.mainWhite};
@@ -23,6 +23,6 @@ export const ButtonStyled = styled.button`
 
   @media screen and (min-width: ${p => p.theme.breakpoints[2]}) {
     font-size: 1.5rem;
-    width: 12rem;
+    width: 8rem;
   }
 `;

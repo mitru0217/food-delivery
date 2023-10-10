@@ -1,51 +1,46 @@
 import { useState } from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
-import Input from '../../../Input';
-import SecondaryButton from '../../../Buttons/SecondaryButton';
-import { Error } from '../../../Utils/utils.styled';
-import { PayForm } from './PaymentForm.styled';
+import PropTypes from 'prop-types';
+import { useForm, Controller } from 'react-hook-form';
+import { ThemeProvider } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+import { useMediaQuery } from '@mui/material';
+import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import CustomTextField from '../../../TextField/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import theme from '../../../../constants/themeMui';
 import CreditCard from '../../../CreditCard/CreditCard';
-import { CardNumberMask } from '../../../Utils';
-const PaymentForm = () => {
-  const methods = useForm();
+import CardNumberMask from '../../../Utils/cardNumberMask';
+
+const PaymentForm = ({ data, updateData }) => {
+  const isDesktop = useMediaQuery('(min-width:767px)');
+  const [isChecked, setIsChecked] = useState(data.confirmData || false);
   const [isFront, setIsFront] = useState(true);
-  const [cardNumber, setCardNumber] = useState('');
-  const [name, setName] = useState('');
-  const [expiration, setExpiration] = useState('');
-  const [securityCode, setSecurityCode] = useState('');
-  const [formattedCard, setFormattedCard] = useState('');
   const [cardType, setCardType] = useState(null);
-
-  const handelNameChange = e => {
-    const { value } = e.target;
-    // setName(value);
-  };
-
-  const handleNumberChange = e => {
-    const { value } = e.target;
-    const formatted = value
-      .replace(/\D/g, '') // Убираем все не-цифры из значения
-      .slice(0, 16); // Обрезаем до 16 символов (максимальная длина номера карты)
-    setCardNumber(formatted);
-    for (const card of CardNumberMask) {
-      const regex = new RegExp(card.regex);
-      if (regex.test(value)) {
-        setCardType(card.cardtype);
-        return;
-      }
+  const [securityCode, setSecurityCode] = useState('');
+  const {
+    control,
+    handleSubmit,
+    formState: { errors,isValid},
+    watch, // Метод для наблюдения за значениями полей
+    clearErrors,
+  } = useForm({
+    mode: 'onBlur',
+    defaultValues: {
+      cardHolderName: data.cardHolderName || '',
+      cardNumber: data.cardNumber || '',
+      expiryDate: data.expiryDate || '',
+      cvv: data.cvv || '',
     }
-    setFormattedCard(formatted || '');
-    setCardType(null);
+ 
+  });
+
+  const toggleCard = () => {
+    setIsFront(!isFront);
   };
 
-  const handleExpirationDateChange = e => {
-    const { value } = e.target;
-    const formattedVal = value
-      .replace(/\D/g, '')
-      .slice(0, 4)
-      .replace(/(\d{2})(\d{2})/, '$1/$2'); // Разбиваем дату на месяц и год
-    setExpiration(formattedVal);
-  };
   const toggleCardSide = code => {
     if (code.trim() !== '') {
       setIsFront(false); // Переворачиваем карту на "заднюю" сторону
@@ -55,168 +50,225 @@ const PaymentForm = () => {
   };
   const handleSecurityCode = e => {
     const { value } = e.target;
-    const formattedVal = value.replace(/\D/g, '').slice(0, 3);
-    setSecurityCode(formattedVal);
-    toggleCardSide(formattedVal);
+    toggleCardSide(value);
+  };
+  const onSubmit = data => {
+    updateData(data);
+    clearErrors();
   };
 
-  const handleSubmit = async data => {
-    console.log(data);
-    methods.reset();
-    await methods.clearErrors();
-  };
+ const handleCheckboxChange = (e) => {
+   setIsChecked(e.target.checked);
+   console.log(e.target.checked);
+  if (e.target.checked) {
+    handleSubmit(onSubmit)();
+  }
+}
+  // Используем watch для получения текущих значений полей
+  const cardHolderName = watch('cardHolderName', ''); // По умолчанию пустая строка
+  const cardNumber = watch('cardNumber', '');
+  const expiryDate = watch('expiryDate', '');
 
   return (
-    <FormProvider {...methods}>
-      <CreditCard
-        name={name}
-        cardNumber={cardNumber}
-        expiration={expiration}
-        securityCode={securityCode}
-        cardType={cardType}
-        // isFront={isFront}
-      />
-      <PayForm onSubmit={methods.handleSubmit(handleSubmit)}>
-        <Input
-          ref={methods.register('input')}
-          name="name"
-          type="text"
-          placeholder="Card Owner"
-          {...methods.register('name', {
-            required: 'This field is required',
-          })}
-          onChange
-          // autoComplete="off"
-        />
-        <Input
-          ref={methods.register('input')}
-          name="cardNumber"
-          // type="numeric"
-          placeholder="Card Number"
-          {...methods.register('cardNumber', {
-            required: 'This field is required',
-            minLength: {
-              value: 16,
-              message: 'Enter at least 16 digits',
-            },
-          })}
-          // autoComplete="off"
-        />
-        <Input
-          ref={methods.register('input')}
-          name="expirityDate"
-          type="text"
-          placeholder="Expirity Date"
-          {...methods.register('date', {
-            required: 'This field is required',
-            pattern: {
-              value: /^(0[1-9]|1[0-2])\/\d{2}$/,
-              message: 'Invalid date format (e.g., 07/24)',
-            },
-          })}
-          onChangeExpirationDate={handleExpirationDateChange}
-          autoComplete="off"
-        />
-        <Input
-          ref={methods.register('input')}
-          name="securitycode"
-          type="text"
-          //        value={securityCode}
-          onChange={handleSecurityCode}
-          
-          placeholder="CVV"
-        />
-        {(methods.formState.errors.card || methods.formState.errors.date) && (
-          <Error>Please fill out all required fields.</Error>
+    <ThemeProvider theme={theme}>
+      <Stack
+        spacing={2}
+        sx={{
+          border: 1,
+          borderColor: 'primary.main',
+          borderRadius: '0.8rem',
+          padding: '4rem',
+        }}
+      >
+        <Typography variant="h1" sx={{ textAlign: 'center' }}>
+          Payment Information
+        </Typography>
+        {isDesktop && (
+          <CreditCard
+            cardHolderName={cardHolderName}
+            cardNumber={cardNumber}
+            expiryDate={expiryDate}
+            securityCode={securityCode}
+            cardType={cardType}
+            isFront={isFront}
+            toggleCard={toggleCard}
+          />
         )}
-        {methods.formState.errors.card?.type === 'minLength' && (
-          <Error>Enter at least 19 digits</Error>
-        )}
-        <SecondaryButton type="submit">Submit</SecondaryButton>
-      </PayForm>
-    </FormProvider>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Grid container spacing={2} justifyContent="center">
+            <Grid item xs={12} sm={8} md={6}>
+              <Controller
+                name="cardHolderName"
+                control={control}
+                render={({ field }) => (
+                  <CustomTextField
+                    {...field} // сначала передаем все свойства из field
+                    onChange={e => {
+                      field.onChange(e);
+                    }}
+                    label="Cardholder Name"
+                    error={!!errors.cardHolderName}
+                    helperText={
+                      errors.cardHolderName && 'Please enter cardholder name'
+                    }
+                  />
+                )}
+                rules={{
+                  required: 'This field is required',
+                  pattern: {
+                    value: /^[A-Za-z\s]*$/,
+                    message: 'Only letters and spaces are allowed',
+                  },
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={8} md={6}>
+              <Controller
+                name="cardNumber"
+                control={control}
+                render={({ field }) => (
+                  <CustomTextField
+                    {...field}
+                    onChange={e => {
+                      const inputVal = e.target.value;
+
+                      // Checking card type before limiting the input
+                      let matchedCardType = null;
+                      for (const card of CardNumberMask) {
+                        const regex = new RegExp(card.regex);
+                        if (regex.test(inputVal)) {
+                          matchedCardType = card.cardtype;
+                          break;
+                        }
+                      }
+                      setCardType(matchedCardType);
+
+                      // Limiting the input to 16 digits
+                      const formatedValue = inputVal
+                        .replace(/[^0-9]/g, '')
+                        .slice(0, 16);
+
+                      field.onChange({
+                        ...e,
+                        target: {
+                          ...e.target,
+                          value: formatedValue,
+                        },
+                      });
+                    }}
+                    label="Card Number"
+                    error={!!errors.cardNumber}
+                    helperText={
+                      errors.cardNumber && 'Please enter a 16-digit card number'
+                    }
+                  />
+                )}
+                rules={{
+                  required: 'This field is required',
+                  pattern: {
+                    value: /^[0-9]{16}$/, // Регулярное выражение для 16 цифр
+                  },
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={8} md={6}>
+              <Controller
+                name="expiryDate"
+                control={control}
+                render={({ field }) => (
+                  <CustomTextField
+                    {...field}
+                    onChange={e => {
+                      const inputVal = e.target.value;
+                      const formatedValue = inputVal
+                        .replace(/[^0-9]/g, '')
+                        .slice(0, 4);
+
+                      field.onChange({
+                        ...e,
+                        target: {
+                          ...e.target,
+                          value: formatedValue,
+                        },
+                      });
+                    }}
+                    label="Expiry Date"
+                    error={!!errors.expiryDate}
+                    helperText={
+                      errors.expiryDate &&
+                      'Please enter a valid expiry date (MMYY)'
+                    }
+                  />
+                )}
+                rules={{
+                  required: 'This field is required',
+                  pattern: {
+                    value: /(\d{2})(\d{2})/,
+                  },
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={8} md={6}>
+              <Controller
+                name="cvv"
+                control={control}
+                render={({ field }) => (
+                  <CustomTextField
+                    {...field}
+                    onChange={e => {
+                      const inputVal = e.target.value;
+                      const formatedValue = inputVal
+                        .replace(/\D/g, '')
+                        .slice(0, 3);
+                      setSecurityCode(formatedValue);
+                      handleSecurityCode(e);
+                      field.onChange({
+                        ...e,
+                        target: {
+                          ...e.target,
+                          value: formatedValue,
+                        },
+                      });
+                    }}
+                    label="CVV"
+                    error={!!errors.cvv}
+                    helperText={errors.cvv && 'Please enter your CVV'}
+                  />
+                )}
+                rules={{
+                  required: 'This field is required',
+                  pattern: {
+                    value: /^[0-9]{3}$/,
+                  },
+                }}
+              />
+            </Grid>
+          </Grid>
+
+          <Box
+            sx={{ marginBottom: '20px', textAlign: 'center', marginTop: '20px' }}
+          >
+            <FormControlLabel 
+            control={<Checkbox checked={isChecked}/>} 
+            label="Confirm your details and proceed to order" 
+            onChange={(e) => handleCheckboxChange(e)}
+            disabled={!isValid} 
+            sx={{ '& .MuiSvgIcon-root': { fontSize: 40 },
+            "& .MuiFormControlLabel-label": {
+             color: "primary.main", 
+             fontSize: "1.5rem", 
+    } }}
+            />
+          </Box>
+        </form>
+      </Stack>
+    </ThemeProvider>
   );
 };
 
+PaymentForm.propTypes = {
+  data: PropTypes.object,
+  updateData: PropTypes.func,
+};
+
 export default PaymentForm;
-
-//  <FormContainer>
-//    <FieldContainer>
-//      <Label htmlFor="name">Name</Label>
-//      <Input
-//        id="name"
-//        maxLength="20"
-//        type="text"
-//        value={name}
-//        onChange={e => setName(e.target.value)}
-//      />
-//    </FieldContainer>
-//    <FieldContainer>
-//      <Label htmlFor="cardnumber">Card Number</Label>
-//      <Input
-//        id="cardnumber"
-//        type="text"
-//        value={cardNumber}
-//        onChange={e => {
-//          const inputVal = e.target.value;
-//          const formattedVal = inputVal
-//            .replace(/\D/g, '') // Убираем все не-цифры из значения
-//            .slice(0, 16); // Обрезаем до 16 символов (максимальная длина номера карты)
-//          setCardNumber(formattedVal);
-//          for (const card of CardNumberMask) {
-//            const regex = new RegExp(card.regex);
-//            if (regex.test(inputVal)) {
-//              setCardType(card.cardtype);
-//              return;
-//            }
-//          }
-//          setCardType(null);
-//        }}
-//      />
-//    </FieldContainer>
-//    <FieldContainer>
-//      <Label htmlFor="expirationdate">Expiration (mm/yy)</Label>
-//      <Input
-//        id="expirationdate"
-//        value={expiration}
-//        onChange={e => {
-//          const inputVal = e.target.value;
-//          const formattedVal = inputVal
-//            .replace(/\D/g, '')
-//            .slice(0, 4)
-//            .replace(/(\d{2})(\d{2})/, '$1/$2'); // Разбиваем дату на месяц и год
-//          setExpiration(formattedVal);
-//        }}
-//        type="text"
-//      />
-//    </FieldContainer>
-//    <FieldContainer>
-//      <Label htmlFor="securitycode">Security Code</Label>
-
-//      <Input
-//        id="securitycode"
-//        type="text"
-//        value={securityCode}
-//        onChange={e => {
-//          const inputVal = e.target.value;
-//          const formattedVal = inputVal.replace(/\D/g, '').slice(0, 3);
-//          setSecurityCode(formattedVal);
-//          toggleCardSide(formattedVal);
-//        }}
-//      />
-//    </FieldContainer>
-//  </FormContainer>;
-
-// const handleCardChange = event => {
-//   const { value } = event.target;
-//   // Удаляем все нецифровые символы из введенного значения
-//   const cardNumber = value.replace(/\D/g, '');
-
-//   // Добавляем дефисы после каждых четырех цифр
-//   const formatted = cardNumber
-//     .match(/.{1,4}/g)
-//     ?.join('-')
-//     .substr(0, 19); // Максимальная длина номера карты
-
-//   setFormattedCard(formatted || '');
-// };
