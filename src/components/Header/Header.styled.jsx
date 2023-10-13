@@ -1,11 +1,15 @@
 import styled from '@emotion/styled'
 
 export const HeaderStyled = styled.header`
+  position: fixed;
+  top: 0;
+  left: 0;
   display: flex;
   justify-content: center;
   width: 100%;
   height: 10rem;
   padding: 2rem;
+  /* margin-bottom: 20rem; */
   background-color: ${p => p.theme.colors.mainGreen};
   @media screen and (min-width: ${p => p.theme.breakpoints[1]}) {
     justify-content: start;

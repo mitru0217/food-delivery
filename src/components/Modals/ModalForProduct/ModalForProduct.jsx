@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { createPortal } from 'react-dom';
 import { Overlay } from './ModalForProduct.styled';
+import Container from '../../Container/Container';
 
 import CloseButton from '../../Buttons/CloseButton/CloseButton';
 const modalRoot = document.getElementById('toast-root');
@@ -8,8 +9,10 @@ const modalRoot = document.getElementById('toast-root');
 const ModalForProduct = ({ isOpen, onClose, children }) => {
   return isOpen
     ? createPortal(
-        <Overlay>
-            {children}
+      <Overlay>
+        <Container>
+          {children}
+        </Container>
           <CloseButton onClick={onClose} />
         </Overlay>,
         modalRoot

@@ -1,4 +1,4 @@
-import { Suspense, useState } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import Loader from '../../components/Loader';
 import  Container  from '../../components/Container';
 import SupplierCard from '../../components/SupplierCard';
@@ -22,7 +22,13 @@ const handleSupplierClick = (supplier) => {
     setSelectedSupplier(null);
     setProductModalOpen(false);
   };
-
+  useEffect(() => {
+    if (isProductModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'visible';
+    }
+  }, [isProductModalOpen]);
 
 // Modal for Order
   const openOrderModal = () => {
@@ -36,7 +42,7 @@ const handleSupplierClick = (supplier) => {
   return (
     <Suspense fallback={<Loader />}>
       <Header onClick={openOrderModal} />
-        <Container>
+        <Container style={{paddingTop: '10rem'}}>
       {suppliers.map((supplier) => (
         <SupplierCard
            key={supplier.id}  
@@ -49,7 +55,7 @@ const handleSupplierClick = (supplier) => {
       {selectedSupplier && (
         <ModalForProduct  isOpen={isProductModalOpen} onClose={closeSupplierModal}>
           {selectedSupplier.products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product.id} product={product} selectedSupplier={selectedSupplier} />
           ))}
         </ModalForProduct>
       )}

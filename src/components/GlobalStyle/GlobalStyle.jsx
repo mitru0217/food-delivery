@@ -8,6 +8,7 @@ export const GlobalStyle = () => (
         box-sizing: border-box;
         margin: 0;
         padding: 0;
+        font-family: 'Poppins, sans-serif'
       }
       :root {
         font-size: 10px;

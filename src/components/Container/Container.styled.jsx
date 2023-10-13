@@ -9,7 +9,7 @@ gap: 2rem;
 width: 100%;
 max-width: 1170px;
 margin: 0 auto;
-padding: 4rem 3rem;
+padding: 15rem 3rem;
 @media screen and (min-width:767px) {
     justify-content:space-evenly;
    flex-direction: row;

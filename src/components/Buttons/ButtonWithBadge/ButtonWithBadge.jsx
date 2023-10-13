@@ -1,12 +1,15 @@
 import PropTypes from 'prop-types';
 import { Badge } from './ButtonWithBadge.styled';
 import { ButtonStyled } from '../SecondaryButton/SecondaryButton.styled';
-
+import { useBadgeCountStore } from '../../../zustand/store';
 const ButtonWithBadge = ({ children, badgeContent, onClick }) => {
+
+
+  const badgeCount = useBadgeCountStore(state => state.badgeCount);
   return (
     <ButtonStyled onClick={onClick}>
       {children}
-      {badgeContent > 0 && <Badge>{badgeContent}</Badge>}
+      {badgeContent > 0 && <Badge>{badgeCount}</Badge>}
     </ButtonStyled>
   );
 };
