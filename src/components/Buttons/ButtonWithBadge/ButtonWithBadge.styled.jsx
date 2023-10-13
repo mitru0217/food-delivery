@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 
+import styled from '@emotion/styled'
 export const Badge = styled.span`
   position: absolute;
   top: -5px;

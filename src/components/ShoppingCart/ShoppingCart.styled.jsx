@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from '@emotion/styled'
 
 export const CartWrapper = styled.div`
   background-color: ${p => p.theme.colors.mainWhite};

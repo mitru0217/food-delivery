@@ -77,7 +77,6 @@ const CreditCard = ({
                     alt={cardType}
                     width="60"
                     height="40"
-                    
                   />
                 )}
               </Up>

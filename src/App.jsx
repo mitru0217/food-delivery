@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import { lazy } from 'react';
 import { Suspense } from 'react';
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider } from '@emotion/react'
 import { GlobalStyle } from './components/GlobalStyle';
 import { theme } from './constants/theme';
 import Loader from './components/Loader/Loader';

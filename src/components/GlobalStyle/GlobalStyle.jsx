@@ -1,5 +1,9 @@
-import { createGlobalStyle } from 'styled-components';
-export const GlobalStyle = createGlobalStyle`
+
+import { css, Global } from '@emotion/react';
+
+export const GlobalStyle = () => (
+  <Global
+    styles={css`
       * {
         box-sizing: border-box;
         margin: 0;
@@ -39,8 +43,6 @@ export const GlobalStyle = createGlobalStyle`
         outline: none;
         cursor: pointer;
       }
-
-    
-
-
-`;
+    `}
+  />
+);

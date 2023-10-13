@@ -1,5 +1,5 @@
 
-import styled from 'styled-components';
+import styled from '@emotion/styled'
 
 
 
@@ -18,6 +18,7 @@ export const Card = styled.div`
   transform-style: preserve-3d;
   transition: transform 0.5s;
   cursor: pointer;
+  
   transform: ${props =>
     props.isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)'};
 `;

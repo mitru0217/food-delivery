@@ -6,7 +6,7 @@ import ShoppingCart from '../../../components/ShoppingCart';
 import CloseButton from '../../Buttons/CloseButton/CloseButton';
 const modalRoot = document.getElementById('modal-root');
 
-const Modal = ({ isOpen, onClose }) => {
+const ModalForOrder = ({ isOpen, onClose }) => {
   return isOpen
     ? createPortal(
         <Overlay>
@@ -18,9 +18,9 @@ const Modal = ({ isOpen, onClose }) => {
     : null;
 };
 
-Modal.propTypes = {
+ModalForOrder.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
 };
 
-export default Modal;
+export default ModalForOrder;
