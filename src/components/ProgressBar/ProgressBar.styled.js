@@ -19,7 +19,7 @@ align-items: center;
 margin-right: 1rem;
 font-size: 2rem;
 font-weight: bold;
-@media screen and (max-width: 768px) {
+@media screen and (min-width: ${p => p.theme.breakpoints[1]}) {
     width: 2rem;
     height: 2rem;
     font-size: 1.5rem;

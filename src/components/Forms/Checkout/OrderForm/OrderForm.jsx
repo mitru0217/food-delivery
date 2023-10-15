@@ -2,15 +2,13 @@ import PropTypes from 'prop-types';
 import { ThemeProvider } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import {
-  Box,
-  Grid,
-} from '@material-ui/core';
-import theme from '../../../../constants/themeMui';
 
+import theme from '../../../../constants/themeMui';
+// import { useStore } from '../../../../zustand/store';
 const CheckList = ({ addressData, paymentData }) => {
   const { name, phoneNumber, city, street, number } = addressData;
   const { cardNumber, expiryDate, cvv } = paymentData;
+  // const cartItems = useStore(state => state.cartItems);
   return (
       <ThemeProvider theme={theme}>
           <Stack
@@ -28,22 +26,23 @@ const CheckList = ({ addressData, paymentData }) => {
         </Typography>
         <ul>
           <Typography variant="h2">
-          Customer:
-        </Typography>
+            Customer:
+          </Typography>
           <li>
             <Typography variant='span'>Name:  </Typography>
-            <Typography variant='span'>{ name || ''}</Typography></li>
+            <Typography variant='span'>{ name || ''}</Typography>
+          </li>
           <li>
             <Typography variant='span'>Phone:  </Typography>
             <Typography variant='span'>{ phoneNumber || ''}</Typography>
-        </li>
+          </li>
         </ul>
      
         <ul>
-            <Typography variant="h2">
-          Delivery address:
-        </Typography>  
-           <li>
+          <Typography variant="h2">
+            Delivery address:
+          </Typography>  
+          <li>
             <Typography variant='span'>City:  </Typography>
             <Typography variant='span'>{city || ''}</Typography>
           </li>
@@ -54,25 +53,40 @@ const CheckList = ({ addressData, paymentData }) => {
           <li>
             <Typography variant='span'>House Number:  </Typography>
             <Typography variant='span'>{number || ''}</Typography>
-       </li>  
+          </li>  
         </ul>
-          <Typography variant="h2">
+        
+        <Typography variant="h2">
           Payment Data:
         </Typography>
         <ul>
-              <li>
+          <li>
             <Typography variant='span'>Card Number:  </Typography>
             <Typography variant='span'>{cardNumber || ''}</Typography>
-       </li>  
+          </li>  
           <li>
             <Typography variant='span'>Expiry Date:  </Typography>
             <Typography variant='span'>{expiryDate || ''}</Typography>
-        </li>
+          </li>
           <li>
             <Typography variant='span'>CVV:  </Typography>
             <Typography variant='span'>{cvv || ''}</Typography>
-        </li>
-      </ul>
+          </li>
+        </ul>
+
+        <Typography variant="h2">
+          Cart Items:
+        </Typography>
+        {/* <ul>
+          {cartItems.map((item, index) => (
+            <li key={index}>
+              <Typography variant='span'>{item.name} - </Typography>
+              <Typography variant='span'>{item.title} - </Typography>
+              <Typography variant='span'>{item.quantity} x </Typography>
+              <Typography variant='span'>{item.price} $</Typography>
+            </li>
+          ))}
+        </ul> */}
     </Stack>
       </ThemeProvider>
 
@@ -93,5 +107,7 @@ CheckList.propTypes = {
     cvv: PropTypes.string.isRequired,
   }).isRequired,
 };
+
+
 
 export default CheckList;

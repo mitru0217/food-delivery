@@ -1,5 +1,5 @@
 import { createTheme } from '@mui/material/styles';
-import { teal, indigo } from '@mui/material/colors';
+// import { teal, indigo } from '@mui/material/colors';
 
 const baseTheme = createTheme({
     palette: {
@@ -35,6 +35,16 @@ const theme = createTheme({
       },
       [baseTheme.breakpoints.up('md')]: {
         fontSize: '2rem',
+      },
+    },
+    h3: {
+      fontSize: '1.25rem',
+      color: baseTheme.palette.secondary.main,
+      '@media (min-width:600px)': {
+        fontSize: '1.5rem',
+      },
+      [baseTheme.breakpoints.up('md')]: {
+        fontSize: '1.8rem',
       },
     },
     span: {

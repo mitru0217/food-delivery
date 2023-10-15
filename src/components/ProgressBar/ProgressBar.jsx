@@ -10,6 +10,9 @@ const renderProgressBar  = (step) => {
 <Line />
 <Arrowhead />
 <Circle active={step === 3}>3</Circle>
+<Line />
+<Arrowhead />
+<Circle active={step === 4}>3</Circle>
 </ProgressBar>
 
      );

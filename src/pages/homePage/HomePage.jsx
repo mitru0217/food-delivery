@@ -33,16 +33,23 @@ const handleSupplierClick = (supplier) => {
 // Modal for Order
   const openOrderModal = () => {
     setOrderModalOpen(true);
+    setProductModalOpen(false)
   };
   const closeOrderModal = () => {
     setOrderModalOpen(false);
   };
-  console.log(suppliers)
+  useEffect(() => {
+    if (isOrderModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'visible';
+    }
+  }, [isOrderModalOpen]);
 
   return (
     <Suspense fallback={<Loader />}>
       <Header onClick={openOrderModal} />
-        <Container style={{paddingTop: '10rem'}}>
+        <Container>
       {suppliers.map((supplier) => (
         <SupplierCard
            key={supplier.id}  

@@ -7,10 +7,14 @@ import CloseButton from '../../Buttons/CloseButton/CloseButton';
 const modalRoot = document.getElementById('toast-root');
 
 const ModalForProduct = ({ isOpen, onClose, children }) => {
+
+  const handleContainerClick = (e) => {
+    e.stopPropagation();
+  };
   return isOpen
     ? createPortal(
-      <Overlay>
-        <Container>
+      <Overlay onClick={onClose}>
+        <Container onClick={handleContainerClick}>
           {children}
         </Container>
           <CloseButton onClick={onClose} />

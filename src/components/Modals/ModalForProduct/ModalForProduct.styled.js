@@ -10,9 +10,7 @@ export const Overlay = styled.div`
   display: flex;
   justify-content: center;
   z-index: 1000;
-  padding-top: 50px;
-  padding-bottom: 50px;
-    background-image: url(${BgProductModal});
+  background-image: url(${BgProductModal});
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;

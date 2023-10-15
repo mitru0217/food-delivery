@@ -9,6 +9,7 @@ export const CartWrapper = styled.div`
   width: 80%;
   overflow: hidden;
   background-color: #FFFAF0;
+  overflow-y: auto;
 `;
 
 export const ButtonWrapper = styled.div`

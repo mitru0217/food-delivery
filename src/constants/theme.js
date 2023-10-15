@@ -1,5 +1,5 @@
 export const theme = {
-  breakpoints: ['375px', '768px', '1440px'],
+  breakpoints: ['375px', '768px', '1200px'],
   fonts: {
     main: 'Poppins, sans-serif',
   },
@@ -14,6 +14,7 @@ export const theme = {
     error: '#fc0303',
   },
   radii: {
-    btnStandart: '0.8rem',
+    btnStandart: '1rem',
+    cardStandart : '2rem',
   },
 };
