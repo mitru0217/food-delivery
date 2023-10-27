@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useForm, Controller } from 'react-hook-form';
 import { ThemeProvider } from '@mui/material/styles';
@@ -15,9 +15,19 @@ import theme from '../../../../constants/themeMui';
 import CustomSelect from '../../../Select/Select';
 import cities from '../../../../constants/cities';
 import { getStreets, getHouseNumbersForStreet} from '../../../../constants/cityData'
+import { useFormDataStore } from '../../../../zustand/store';
 
-const AddressForm = ({ data, updateData }) => {
-  const [isChecked, setIsChecked] = useState(data.confirmData || false);
+const AddressForm = () => {
+  const { addressData, resetAddressData } = useFormDataStore();
+
+  const [storedData, setStoredData] = useState(() => {
+    const savedData = localStorage.getItem('addressData');
+    if (savedData) {
+      return JSON.parse(savedData);
+    }
+    return addressData;
+  });
+  const [isChecked, setIsChecked] = useState( false);
   const {
     control,
     setValue,
@@ -28,11 +38,11 @@ const AddressForm = ({ data, updateData }) => {
   } = useForm({
     mode: 'onBlur',
     defaultValues: {
-      name: data.name || '',
-      phoneNumber: data.phoneNumber || '',
-      city: data.city || '',
-      street: data.street || '',
-      number: data.number || '',
+      name: storedData.name || '',
+      phoneNumber: storedData.phoneNumber || '',
+      city: storedData.city || '',
+      street: storedData.street || '',
+      number: storedData.number || '',
       confirmData: true
     }
   });
@@ -63,8 +73,10 @@ const numberOptions = numbersForSelectedStreet.map(number => ({
 }));
 
   const onSubmit = data => {
-    updateData(data);
+    localStorage.setItem('addressData', JSON.stringify(data));
+    setStoredData(data);
     clearErrors();
+   
   };
 const handleCheckboxChange = (e) => {
   setIsChecked(e.target.checked);
@@ -86,7 +98,7 @@ const handleCheckboxChange = (e) => {
           textAlign: 'center' 
         }}>
      <Typography variant="h1">
-          Contact Information
+     Shipping address
         </Typography>
        <form onSubmit={handleSubmit(onSubmit)}>
        <Grid container spacing={2} justifyContent="center">
@@ -197,7 +209,7 @@ const handleCheckboxChange = (e) => {
           >
             <FormControlLabel 
             control={<Checkbox checked={isChecked}/>} 
-            label="Confirm your details and proceed to payment" 
+            label="Use this address for payment details" 
             onChange={(e) => handleCheckboxChange(e)}
             disabled={!isValid} 
             sx={{ '& .MuiSvgIcon-root': { fontSize: 40 },    "& .MuiFormControlLabel-label": {

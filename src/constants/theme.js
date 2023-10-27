@@ -8,6 +8,7 @@ export const theme = {
     mainWhite: '#FFFFFF',
     mainGrey: '#7E7E7E',
     mainGreen: '#254000',
+    secondaryGreen: '#4CAF50',
     primaryBtn: '#5646a3',
     btnHover: '#0056b3',
     secondaryBtn: '#007bff',

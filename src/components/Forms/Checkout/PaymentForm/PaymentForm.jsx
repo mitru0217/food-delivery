@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useForm, Controller } from 'react-hook-form';
 import { ThemeProvider } from '@mui/material/styles';
@@ -13,10 +13,21 @@ import Checkbox from '@mui/material/Checkbox';
 import theme from '../../../../constants/themeMui';
 import CreditCard from '../../../CreditCard/CreditCard';
 import CardNumberMask from '../../../Utils/cardNumberMask';
+import { useFormDataStore } from '../../../../zustand/store';
+const PaymentForm = () => {
 
-const PaymentForm = ({ data, updateData }) => {
-  const isDesktop = useMediaQuery('(min-width:767px)');
-  const [isChecked, setIsChecked] = useState(data.confirmData || false);
+const { paymentData, resetPaymentData } = useFormDataStore();
+  const [storedData, setStoredData] = useState(() => {
+    const savedData = localStorage.getItem('paymentData');
+    if (savedData) {
+      return JSON.parse(savedData);
+    }
+    return paymentData;
+  });
+
+
+  const isDesktop = useMediaQuery('(min-width:1000px)');
+  const [isChecked, setIsChecked] = useState(storedData.confirmData || false);
   const [isFront, setIsFront] = useState(true);
   const [cardType, setCardType] = useState(null);
   const [securityCode, setSecurityCode] = useState('');
@@ -29,13 +40,26 @@ const PaymentForm = ({ data, updateData }) => {
   } = useForm({
     mode: 'onBlur',
     defaultValues: {
-      cardHolderName: data.cardHolderName || '',
-      cardNumber: data.cardNumber || '',
-      expiryDate: data.expiryDate || '',
-      cvv: data.cvv || '',
+      cardHolderName: storedData.cardHolderName || '',
+      cardNumber: storedData.cardNumber || '',
+      expiryDate: storedData.expiryDate || '',
+      cvv: storedData.cvv || '',
+      confirmData: true
     }
- 
   });
+
+  useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key === 'paymentData') {
+        setStoredData(JSON.parse(e.newValue));
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
 
   const toggleCard = () => {
     setIsFront(!isFront);
@@ -53,13 +77,13 @@ const PaymentForm = ({ data, updateData }) => {
     toggleCardSide(value);
   };
   const onSubmit = data => {
-    updateData(data);
+    localStorage.setItem('paymentData', JSON.stringify(data));
+    setStoredData(data);
     clearErrors();
   };
 
  const handleCheckboxChange = (e) => {
    setIsChecked(e.target.checked);
-   console.log(e.target.checked);
   if (e.target.checked) {
     handleSubmit(onSubmit)();
   }
