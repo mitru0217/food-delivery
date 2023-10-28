@@ -4,24 +4,24 @@ import ChelentanoLogo from '../assets/images/suppliers/chelentano.png';
 import ChickFillLogo from '../assets/images/suppliers/chick_fil_a.png';
 import TacoBellLogo from '../assets/images/suppliers/taco_bell.png';
 import KfcLogo from '../assets/images/suppliers/kfc.png'
-import TexasBeef from '../assets/images/products/Burger King/texas-beef.jpg';
-import ChiliCheeseDoubleBeef from '../assets/images/products/Burger King/chili-cheese-double-beef.jpg';
-import BigKing from '../assets/images/products/Burger King/big-king.jpg';
-import BaconKing from '../assets/images/products/Burger King/bacon-king.jpg';
-import BigKingXXL from '../assets/images/products/Burger King/big-king-xxl.jpg';
-import Whopper from '../assets/images/products/Burger King/whopper.jpg';
-import Steakhouse from '../assets/images/products/Burger King/steakhouse.jpg';
-import KingJrBurger from '../assets/images/products/Burger King/king-jr-burger.jpg';
-import KingJrCheeseburger from '../assets/images/products/Burger King/king-jr-cheeseburger.jpg';
-import SpicyMcCrispy from '../assets/images/products/McDonalds/SpicyCrispyChicke.jpg';
-import BigMac from '../assets/images/products/McDonalds/BigMac.jpg';
-import QuarterPounderWithCheese from '../assets/images/products/McDonalds/QuarterPounderwithCheese.jpg';
-import EggMcMuffin from '../assets/images/products/McDonalds/EggMcMuffin.jpg';
-import Cheeseburger from '../assets/images/products/McDonalds/Cheeseburger.jpg';
-import McChicken from '../assets/images/products/McDonalds/McChicken.jpg';
-import WorldFamousFries from '../assets/images/products/McDonalds/Fries.jpg';
-import McFlurryWithOreoCookies from '../assets/images/products/McDonalds/OREOMcFlurry.jpg';
-import HamburgerHappyMeal from '../assets/images/products/McDonalds/HamburgerHappyMeal.jpg';
+import TexasBeef from '../assets/images/products/Burger King/texas-beef.png';
+import ChiliCheeseDoubleBeef from '../assets/images/products/Burger King/chili-cheese-double-beef.png';
+import BigKing from '../assets/images/products/Burger King/big-king.png';
+import BaconKing from '../assets/images/products/Burger King/bacon-king.png';
+import BigKingXXL from '../assets/images/products/Burger King/big-king-xxl.png';
+import Whopper from '../assets/images/products/Burger King/whopper.png';
+import Steakhouse from '../assets/images/products/Burger King/steakhouse.png';
+import KingJrBurger from '../assets/images/products/Burger King/king-jr-burger.png';
+import KingJrCheeseburger from '../assets/images/products/Burger King/king-jr-cheeseburger.png';
+import SpicyMcCrispy from '../assets/images/products/McDonalds/SpicyCrispyChicke.png';
+import BigMac from '../assets/images/products/McDonalds/BigMac.png';
+import QuarterPounderWithCheese from '../assets/images/products/McDonalds/QuarterPounderwithCheese.png';
+import EggMcMuffin from '../assets/images/products/McDonalds/EggMcMuffin.png';
+import Cheeseburger from '../assets/images/products/McDonalds/Cheeseburger.png';
+import McChicken from '../assets/images/products/McDonalds/McChicken.png';
+import WorldFamousFries from '../assets/images/products/McDonalds/Fries.png';
+import McFlurryWithOreoCookies from '../assets/images/products/McDonalds/OREOMcFlurry.png';
+import HamburgerHappyMeal from '../assets/images/products/McDonalds/HamburgerHappyMeal.png';
 import Barbequ from '../assets/images/products/Chelentano/barbequ.jpg';
 import Egoista from '../assets/images/products/Chelentano/egoista-na-tomatniy-osnovi.jpg';
 import СhickenKalcone from '../assets/images/products/Chelentano/kalcone.jpg';
@@ -45,14 +45,14 @@ import NachosSupreme from '../assets/images/products/Taco Bell/NACHOS_SUPREME.jp
 import Quesadilla from '../assets/images/products/Taco Bell/QUESADILLA.jpg';
 import CrunchyTaco from '../assets/images/products/Taco Bell/CRUNCHY TACO.jpg';
 import CrunchyTacoSupreme from '../assets/images/products/Taco Bell/CRUNCHY_TACO_ SUPREME.jpg';
-import ZingerBurger from '../assets/images/products/KFC/zinger-burger.jpg';
-import KentuckyBbqOriginalBurger from '../assets/images/products/KFC/bbq-original.jpg';
-import ColonelTsBurger from '../assets/images/products/KFC/colonel-ts-burger.jpg';
-import VeggieColonelTsBurger from '../assets/images/products/KFC/veggie-coloneltsburger.jpg';
-import DoubleCheeseBaconBurger from '../assets/images/products/KFC/double-cheese-bacon.jpg';
-import GourmetBbqBurger from '../assets/images/products/KFC/gourmet-bbq-burger.jpg';
-import CherryMilkshake from '../assets/images/products/KFC/cherry-05.jpg';
-import Twister from '../assets/images/products/KFC/twister.jpg';
+import ZingerBurger from '../assets/images/products/KFC/zinger-burger.png';
+import KentuckyBbqOriginalBurger from '../assets/images/products/KFC/bbq-original.png';
+import ColonelTsBurger from '../assets/images/products/KFC/colonel-ts-burger.png';
+import VeggieColonelTsBurger from '../assets/images/products/KFC/veggie-coloneltsburger.png';
+import DoubleCheeseBaconBurger from '../assets/images/products/KFC/double-cheese-bacon.png';
+import GourmetBbqBurger from '../assets/images/products/KFC/gourmet-bbq-burger.png';
+import CherryMilkshake from '../assets/images/products/KFC/cherry-05.png';
+import Twister from '../assets/images/products/KFC/twister.png';
 import ChickenBiscuit from '../assets/images/products/ChickFilA/Biscuit_Chicken.png';
 const suppliers = [
   {
@@ -401,42 +401,42 @@ const suppliers = [
     products: [
       {
         id: 51,
-        title: 'BURRITO BOWL MEXICAN',
+        title: 'Burrito Bowl Mexican',
         img: BurritoBowlMexican,
         description: 'A burrito bowl with Mexican beef, rice, tomato salsa, sour cream and nacho cheese sauce.',
         price: 10.99,
       },
         {
         id: 52,
-        title: 'QUESARITO',
+        title: 'Quesarito',
         img: Quesarito,
         description: 'A burrito with Mexican beef, rice, tomato salsa, sour cream and nacho cheese sauce, wrapped in a grilled tortilla with a layer of melted cheese.',
         price: 10.99,
       },
          {
         id: 53,
-        title: 'ENSALADA DE POLLO',
+        title: 'Ensalada de Pollo',
         img: EnsaladaDePollo,
         description: 'A salad with Mexican chicken, rice, tomato salsa, sour cream and nacho cheese sauce.',
         price: 8.99,
       },
         {
         id: 54,
-        title: 'GRAN BURRITO',
+        title: 'Gran Burrito',
         img: GranBurrito ,
         description: 'A burrito with Mexican beef, rice, tomato salsa, sour cream and nacho cheese sauce.',
         price: 11.99,
       },
        {
         id: 55,
-        title: 'NACHOS SUPREME',
+        title: 'Nachos Supreme',
         img: NachosSupreme,
         description: 'Nachos with Mexican beef, tomato salsa, sour cream and nacho cheese sauce.',
         price: 14.99,
       },
        {
         id: 56,
-        title: 'QUESADILLA',
+        title: 'Quesadilla',
         img: Quesadilla,
         description: 'A grilled tortilla with a layer of melted cheese.',
         price: 13.99,
@@ -450,7 +450,7 @@ const suppliers = [
       },
            {
         id: 58,
-        title: 'CRUNCHY TACO SUPREME',
+        title: 'Crunchy Taco Supreme ',
         img: CrunchyTacoSupreme ,
         description: 'A crunchy taco with Mexican beef, lettuce, tomato salsa, sour cream and nacho cheese sauce.',
         price: 16.99,
@@ -464,56 +464,56 @@ const suppliers = [
     products: [
       {
         id: 61,
-        title: 'ZINGER BURGER',
+        title: 'Zinger Burger',
         img: ZingerBurger,
         description: 'The Zinger® is a 100% chicken breast fillet burger with lettuce and mayo on a seeded bun.',
         price: 10.5
       },
         {
         id: 62,
-        title: 'KENTUCKY BBQ ORIGINAL BURGER',
+        title: 'Kentucky Bbq Burger',
         img: KentuckyBbqOriginalBurger,
         description: 'The Kentucky BBQ Original Burger is a 100% chicken breast fillet burger with a BBQ sauce, cheese, bacon, lettuce and mayo on a seeded bun.',
         price: 14.5
       },
        {
         id: 63,
-        title: 'COLONEL TS BURGER',
+        title: 'Colonel Burger',
         img: ColonelTsBurger,
         description: 'The Colonel TS Burger is a 100% chicken breast fillet burger with a spicy coating, cheese, lettuce and mayo on a seeded bun.',
         price: 12.5
       },
        {
         id: 64,
-        title: 'VEGGIE COLONEL TS BURGER',
+        title: 'Veggie Colonel Burger',
         img: VeggieColonelTsBurger,
         description: 'The Veggie Colonel TS Burger is a veggie burger with a spicy coating, cheese, lettuce and mayo on a seeded bun.',
         price: 10.5
       },
        {
         id: 65,
-        title: 'DOUBLE CHEESE & BACON BURGER',
+        title: 'Double Cheese&Bacon Burger',
         img: DoubleCheeseBaconBurger,
         description: 'The Double Cheese & Bacon Burger is a 100% chicken breast fillet burger with a spicy coating, cheese, bacon, lettuce and mayo on a seeded bun.',
         price: 15.5
       },
          {
         id: 66,
-        title: 'GOURMET BBQ BURGER',
+        title: 'Gourmet Burger',
         img: GourmetBbqBurger,
         description: 'The Gourmet BBQ Burger is a 100% chicken breast fillet burger with a BBQ sauce, cheese, bacon, lettuce and mayo on a seeded bun.',
         price: 12.5
       },
          {
         id: 67,
-        title: 'CHERRY MILKSHAKE 0.5L',
+        title: 'Cherry Milkshake 0.5L',
         img: CherryMilkshake,
         description: 'Cherry Milkshake 0.5L',
         price: 6.5
       },
            {
         id: 68,
-        title: 'TWISTER',
+        title: 'Twister',
         img: Twister,
         description: 'The Twister is a 100% chicken breast fillet, lettuce, tomato and pepper mayo, wrapped in a soft tortilla wrap.',
         price: 6.5

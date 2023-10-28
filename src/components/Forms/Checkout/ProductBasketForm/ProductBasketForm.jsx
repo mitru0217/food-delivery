@@ -1,21 +1,133 @@
-// import PropTypes from 'prop-types';
-// import { useStore } from '../../../../zustand/store';
+import { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { useMediaQuery } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-// import List from '@mui/material/List';
-// import ListItem from '@mui/material/ListItem';
-// import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
-import Grid  from '@mui/material/Grid';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 import theme from '../../../../constants/themeMui';
+import { useStore} from '../../../../zustand/store';
+import Counter from '../../../Counter/Counter';
+import { useStoreOrder } from '../../../../zustand/store';
 
 const ProductBasketForm = () => {
-  let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-  console.log('cartItems:', cartItems);
+  const [cartItems, setCartItems] = useState(
+    (JSON.parse(localStorage.getItem('cartItems')) || []).map(item => ({
+      ...item,
+      quantityBadge: item.quantity,
+      totalPriceForProduct: (item.quantity * item.productInfo.price).toFixed(2),
+    }))
+  );
+  
+  const [isChecked, setIsChecked] = useState(
+    JSON.parse(localStorage.getItem('isChecked')) || cartItems.confirmData || false
+  );
+  const setOrderedProducts = useStoreOrder(state => state.setOrderedProducts);
+  const setTotalPrice = useStoreOrder(state => state.setTotalPrice);
+  const setBadgeCount = useStore(state => state.setBadgeCount);
+  const isTablet = useMediaQuery('(min-width:768px)');
+  const isMobile = useMediaQuery(`(max-width: 767px)`);
+  const isDesktop = useMediaQuery('(min-width:1000px)');
+
+  const {
+    handleSubmit,
+    clearErrors,
+    formState: { isValid },
+  } = useForm({
+    mode: 'onBlur',
+    confirmData: true
+  });
+
+
+  
+  useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key === 'cartItems') {
+        const updatedCartItems = JSON.parse(e.newValue);
+        setCartItems(updatedCartItems.map(item => ({
+          ...item,
+          quantityBadge: item.quantity,
+          totalPriceForProduct: (item.quantity * item.productInfo.price).toFixed(2),
+        })));
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
+
+  const total = cartItems.reduce(
+    (sum, item) => sum + item.quantityBadge * item.productInfo.price,
+    0
+  );
+  const roundedTotal = total.toFixed(2);
+
+  const handleIncrement = (index, event) => {
+    event.preventDefault();
+    const updatedCartItems = [...cartItems];
+    updatedCartItems[index].quantityBadge++;
+    updatedCartItems[index].quantity = updatedCartItems[index].quantityBadge;
+    const totalForUpdatedProduct =
+      updatedCartItems[index].quantityBadge *
+      updatedCartItems[index].productInfo.price;
+    updatedCartItems[index].totalPriceForProduct =
+      totalForUpdatedProduct.toFixed(2);
+    setCartItems(updatedCartItems);
+    localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+  };
+
+  const handleDecrement = (index, event) => {
+    event.preventDefault();
+    const updatedCartItems = [...cartItems];
+    if (updatedCartItems[index].quantityBadge >= 2) {
+      updatedCartItems[index].quantityBadge--;
+      updatedCartItems[index].quantity = updatedCartItems[index].quantityBadge;
+      const totalForUpdatedProduct =
+        updatedCartItems[index].quantityBadge *
+        updatedCartItems[index].productInfo.price;
+      updatedCartItems[index].totalPriceForProduct =
+        totalForUpdatedProduct.toFixed(2);
+      setCartItems(updatedCartItems);
+      localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+    }
+  };
+
+  const handleRemove = index => {
+    const updatedCartItems = [...cartItems];
+    updatedCartItems.splice(index, 1);
+    setCartItems(updatedCartItems);
+    localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+      // Обновление badgeCount в глобальном состоянии
+      const updatedBadgeCount = updatedCartItems.reduce((acc, item) => acc + item.quantityBadge, 0);
+      setBadgeCount(updatedBadgeCount);
+  };
+
+  const onSubmit = () => {
+    const updatedCartItems = [...cartItems];
+    updatedCartItems.confirmData = true;
+    setCartItems(updatedCartItems);
+    localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+    setOrderedProducts(cartItems);
+    setTotalPrice(roundedTotal);
+    clearErrors();
+  };
+
+  const handleCheckboxChange = e => {
+    setIsChecked(e.target.checked);
+    if (e.target.checked) {
+      handleSubmit(onSubmit)();
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Stack
@@ -28,35 +140,134 @@ const ProductBasketForm = () => {
           textAlign: 'center',
         }}
       >
-        <Typography variant="h1">Ordered Products</Typography>
+        {cartItems.length === 0 ? (
+          <Typography variant="h1">Your cart is empty</Typography>
+        ) : (
+          <Typography variant="h1">Ordered Products</Typography>
+        )}
+
         <Box sx={{ width: '100%' }}>
-          <Grid container spacing={2} justifyContent="center"
-          >
-            {cartItems.map((item, index) => (
-              <Grid item xs={12} sm={8} md={4} key={index}>
-                
-                <Box sx={{display:'flex', flexWrap: 'wrap', }}>
-                
-                <Box sx={{ width: '20rem', marginRight:'1rem' }}>
-                <img src={item.productInfo.img} alt={item.productInfo.title} width='100' />
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Grid
+              container
+              spacing={2}
+              justifyContent="center"
+              style={{
+                maxHeight: isMobile ? '200px' : isTablet ? '400px' : 'auto',
+                overflowY: isMobile || isTablet ? 'auto' : 'visible',
+              }}
+            >
+              {cartItems.map((item, index) => (
+                <Grid item xs={12} sm={8} md={4} key={index}>
+                  <Box
+                    sx={{
+                      position: 'relative',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      textAlign: 'center',
+                      border: '1px solid #ccc',
+                      padding: '1rem',
+                    }}
+                  >
+                    <IconButton
+                      onClick={() => handleRemove(index)}
+                      sx={{
+                        position: 'absolute',
+                        top: '0.5rem',
+                        left: '0.5rem',
+                        '&:hover': {
+                          '& .MuiSvgIcon-root': {
+                            // Стиль для иконки при ховере
+                            color: 'error.main',
+                          },
+                        },
+                      }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                    <Box
+                      sx={{
+                        width: '10rem',
+                        marginRight: '1rem',
+                        display: 'flex',
+                        alignContent: 'center',
+                      }}
+                    >
+                      <img
+                        style={{
+                          width: '100%',
+                          objectFit: 'contain',
+                        }}
+                        src={item.productInfo.img}
+                        alt={item.productInfo.title}
+                      />
+                    </Box>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        textAlign: 'start',
+                        float: 'right',
+                      }}
+                    >
+                      <Typography variant="h3">
+                        {item.suppliers.name}
+                      </Typography>
+                      <Typography variant="span">
+                        {item.productInfo.title}
+                      </Typography>
+                      <Typography variant="span">
+                        {item.productInfo.price} $
+                      </Typography>{' '}
+                      <Counter
+                        count={item.quantityBadge}
+                        onIncrement={event => handleIncrement(index, event)}
+                        onDecrement={event => handleDecrement(index, event)}
+                      />
+                      <Typography variant="h5" sx={{ marginTop: '1rem' }}>
+                        Total:{' '}
+                        <Typography variant="span">
+                          {(
+                            item.quantityBadge * item.productInfo.price
+                          ).toFixed(2)}{' '}
+                          $
+                        </Typography>
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Grid>
+              ))}
+            </Grid>
+            <Divider sx={{ marginBottom: '2rem' }} />
+            {cartItems.length > 0 && (
+              <>
+                <Typography variant="h4" sx={{ fontWeight: '500' }}>
+                  Total sum:
+                  <Typography variant="spanSecond" sx={{ fontWeight: '900' }}>
+                    {' '}
+                    {roundedTotal} $
+                  </Typography>
+                </Typography>
+                <Box sx={{ marginBottom: '2rem', marginTop: '2rem' }}>
+                  <FormControlLabel
+                    control={<Checkbox checked={isChecked} />}
+                    label="Confirm your details and proceed to payment"
+                    onChange={e => handleCheckboxChange(e)}
+                    disabled={!isValid}
+                    sx={{
+                      '& .MuiSvgIcon-root': { fontSize: 40 },
+                      '& .MuiFormControlLabel-label': {
+                        color: 'primary.main',
+                        fontSize: isDesktop ? '1.5rem' : '1.2rem',
+                      },
+                    }}
+                  />
                 </Box>
-                <Box sx={{textAlign:'start'}}>
-                <Typography variant="h3">Producer: <Typography variant='span'>{item.suppliers.name}</Typography></Typography>
-                  <Typography variant="h3">Name: <Typography variant='span'>{item.productInfo.title}</Typography></Typography>
-                  <Typography variant="h3">Price per one: <Typography variant='span'>{item.productInfo.price} $</Typography> </Typography>
-                  <Typography variant="h3">Quantity: <Typography variant='span'>{item.quantity}</Typography></Typography>
-                </Box>
-                </Box>
-       
-              </Grid>
-            ))}
-          </Grid>
-          <Divider />
+              </>
+            )}
+          </form>
         </Box>
-        <FormControlLabel
-          control={<Checkbox defaultChecked />}
-          label="I want to receive inspiration, marketing promotions and updates via email."
-        />
       </Stack>
     </ThemeProvider>
   );

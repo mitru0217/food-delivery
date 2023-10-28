@@ -3,21 +3,26 @@ import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@mui/material/FormControl';
 import { useMediaQuery } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
+import baseTheme from '../../constants/themeMui';
+
 
 const CustomTextField = forwardRef(
   ({ value, error, helperText, label, onChange, ...props }, ref) => {
     const id = error ? 'standard-error-helper-text' : 'standard-search';
 
     const isSmallScreen = useMediaQuery('(max-width:767px)');
-    const fontSize = isSmallScreen ? '15px' : '25px';
+    const fontSize = isSmallScreen ? '1.5rem' : '2rem';
     return (
-      <FormControl ref={ref}>
+      <ThemeProvider theme={baseTheme}>
+     <FormControl ref={ref}>
         <TextField
           id={id}
           label={
             <span
               style={{
-                fontSize: error ? '10px' : '15px',
+                fontSize: error ? '1.5rem' : '2rem',
+                сolor: error ? 'red' : 'baseTheme.palette.primary.main',
               }}
             >
               {label || (error ? 'Error' : 'Search Field')}
@@ -30,6 +35,7 @@ const CustomTextField = forwardRef(
             <span
               style={{
                 fontSize: error ? '15px' : '25px',
+                color: baseTheme.palette.secondary.indigo,
               }}
             >
               {error && helperText}
@@ -38,6 +44,7 @@ const CustomTextField = forwardRef(
           InputProps={{
             style: {
               fontSize: fontSize,
+              color: baseTheme.palette.secondary.indigo,
             },
           }}
           {...props}
@@ -45,6 +52,9 @@ const CustomTextField = forwardRef(
           onChange={onChange}
         />
       </FormControl>
+
+      </ThemeProvider>
+ 
     );
   }
 );

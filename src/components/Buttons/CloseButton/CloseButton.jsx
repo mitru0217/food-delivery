@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
-import { AiOutlineCloseCircle } from 'react-icons/ai';
-import { ButtonStyled } from './CloseButton.styled';
+// import { AiOutlineCloseCircle } from 'react-icons/ai';
+import { ButtonStyled, CloseIcon } from './CloseButton.styled';
 
 const CloseButton = ({ onClick }) => {
   return (
     <ButtonStyled onClick={onClick}>
-      <AiOutlineCloseCircle
-        style={{ width: '4rem', height: '4rem', color: 'white' }}
+      <CloseIcon
+        // style={{ width: '4rem', height: '4rem', color: 'white' }}
       />
     </ButtonStyled>
   );

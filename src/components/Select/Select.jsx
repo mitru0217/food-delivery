@@ -1,6 +1,8 @@
 import { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import { useMediaQuery } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
+import baseTheme from '../../constants/themeMui';
 import {
   Select,
   MenuItem,
@@ -11,30 +13,34 @@ import {
 const CustomSelect = forwardRef(
   ({ name, label, options, helperText, error, onChange, onBlur, value, ...rest }, ref) => {
     const isSmallScreen = useMediaQuery('(max-width:767px)');
-    const fontSize = isSmallScreen ? '15px' : '20px';
-    const width = isSmallScreen ? '160px' : '275px';
+    const fontSize = isSmallScreen ? '1.25rem' : '2rem';
+    const width = isSmallScreen ? '160px' : '228px';
 
     return (
-      <FormControl>
+      <ThemeProvider theme={baseTheme}>
+    <FormControl>
         <InputLabel id={`${name}-label`} style={{ fontSize: fontSize }}>{label}</InputLabel>
         <Select
+        
           value={value}
           onChange={onChange}
           onBlur={onBlur}
           ref={ref}
           labelId={`${name}-label`}
-          style={{ width: width, fontSize: fontSize }}
+          style={{ width: width, fontSize: fontSize, color: baseTheme.palette.secondary.indigo }}
           error={error}
           {...rest}
         >
           {options.map(option => (
-            <MenuItem key={option.value} value={option.value} style={{ fontSize: fontSize }}>
+            <MenuItem key={option.value} value={option.value} style={{ fontSize: fontSize, color: baseTheme.palette.primary.main }}>
               {option.label}
             </MenuItem>
           ))}
         </Select>
         {error && <span style={{ fontSize: error ? '15px' : '25px' }}>{helperText}</span>}
       </FormControl>
+      </ThemeProvider>
+  
     );
   }
 );
