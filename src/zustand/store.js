@@ -8,7 +8,6 @@ export const useStore = create(set => ({
   error: null,
   quantity: 1,
   selectedSizePrice: null,
-  // setBadgeCount: count => set({ badgeCount: count }),
   setBadgeCount: (count) => {
     set({ badgeCount: count });
     localStorage.setItem('badgeCount', count.toString()); // Сохраняем в localStorage
@@ -30,6 +29,15 @@ setQuantity: quantity => set({ quantity }),
 setTotalPriceForProduct: price => set({ totalPriceForProduct: price }),
 setTotalPrice: price => set({ totalPrice: price }),
 }));
+
+
+
+
+
+
+
+
+
 
 export const useFormDataStore = create(set => ({
   addressData: {
