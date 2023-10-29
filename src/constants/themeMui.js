@@ -1,5 +1,5 @@
 import { createTheme } from '@mui/material/styles';
-import { green,red, indigo } from '@mui/material/colors';
+import { green,red, indigo, teal } from '@mui/material/colors';
 
 const baseTheme = createTheme({
     palette: {
@@ -7,9 +7,10 @@ const baseTheme = createTheme({
       main: '#00a2e5',
     },
     secondary: {
-      main: red[500],
+      main: teal[900],
       text: green[500],
       indigo: indigo[500],
+      error: red[500],
     },
   },
   breakpoints: {

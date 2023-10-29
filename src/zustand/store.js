@@ -8,6 +8,8 @@ export const useStore = create(set => ({
   error: null,
   quantity: 1,
   selectedSizePrice: null,
+  totalPriceForProduct: 0,
+  totalPrice: 0,
   setBadgeCount: (count) => {
     set({ badgeCount: count });
     localStorage.setItem('badgeCount', count.toString()); // Сохраняем в localStorage
@@ -15,29 +17,11 @@ export const useStore = create(set => ({
   setQuantity: quantity => set({ quantity: quantity }),
   setOrderedProducts: products => set({ products }),
   setSelectedSuppliers: supplierId => set({ selectedSuppliers: supplierId }),
+  setTotalPriceForProduct: price => set({ totalPriceForProduct: price }),
+  setTotalPrice: price => set({ totalPrice: price }),
   setIsLoading: loading => set({ isLoading: loading }),
   setError: error => set({ error }),
 }));
-
-export const useStoreOrder = create(set => ({
-  orderedProducts: [],
-  quantity: 1,
-  totalPriceForProduct: 0,
-  totalPrice: 0,
-setOrderedProducts: products => set({ products }),
-setQuantity: quantity => set({ quantity }),
-setTotalPriceForProduct: price => set({ totalPriceForProduct: price }),
-setTotalPrice: price => set({ totalPrice: price }),
-}));
-
-
-
-
-
-
-
-
-
 
 export const useFormDataStore = create(set => ({
   addressData: {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState,useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useForm, Controller } from 'react-hook-form';
 import { ThemeProvider } from '@mui/material/styles';
@@ -14,9 +14,9 @@ import theme from '../../../../constants/themeMui';
 import CreditCard from '../../../CreditCard/CreditCard';
 import CardNumberMask from '../../../Utils/cardNumberMask';
 import { useFormDataStore } from '../../../../zustand/store';
-const PaymentForm = () => {
 
-const { paymentData, resetPaymentData } = useFormDataStore();
+const PaymentForm = ({ onFormSubmitSuccess }) => {
+  const { paymentData } = useFormDataStore();
   const [storedData, setStoredData] = useState(() => {
     const savedData = localStorage.getItem('paymentData');
     if (savedData) {
@@ -25,16 +25,16 @@ const { paymentData, resetPaymentData } = useFormDataStore();
     return paymentData;
   });
 
-
   const isDesktop = useMediaQuery('(min-width:1000px)');
-  const [isChecked, setIsChecked] = useState(storedData.confirmData || false);
+  const [isChecked, setIsChecked] = useState(false);
   const [isFront, setIsFront] = useState(true);
-  const [cardType, setCardType] = useState(null);
+  const [cardType, setCardType] = useState(localStorage.getItem('cardType') || null);
+
   const [securityCode, setSecurityCode] = useState('');
   const {
     control,
     handleSubmit,
-    formState: { errors,isValid},
+    formState: { errors, isValid },
     watch, // Метод для наблюдения за значениями полей
     clearErrors,
   } = useForm({
@@ -44,22 +44,15 @@ const { paymentData, resetPaymentData } = useFormDataStore();
       cardNumber: storedData.cardNumber || '',
       expiryDate: storedData.expiryDate || '',
       cvv: storedData.cvv || '',
-      confirmData: true
-    }
+      confirmData: true,
+    },
   });
 
   useEffect(() => {
-    const handleStorageChange = (e) => {
-      if (e.key === 'paymentData') {
-        setStoredData(JSON.parse(e.newValue));
-      }
-    };
-    window.addEventListener('storage', handleStorageChange);
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
-  }, []);
-
+    if (cardType) {
+        localStorage.setItem('cardType', cardType);
+    }
+}, [cardType]);
 
   const toggleCard = () => {
     setIsFront(!isFront);
@@ -79,15 +72,16 @@ const { paymentData, resetPaymentData } = useFormDataStore();
   const onSubmit = data => {
     localStorage.setItem('paymentData', JSON.stringify(data));
     setStoredData(data);
+    onFormSubmitSuccess();
     clearErrors();
   };
 
- const handleCheckboxChange = (e) => {
-   setIsChecked(e.target.checked);
-  if (e.target.checked) {
-    handleSubmit(onSubmit)();
-  }
-}
+  const handleCheckboxChange = e => {
+    setIsChecked(e.target.checked);
+    if (e.target.checked) {
+      handleSubmit(onSubmit)();
+    }
+  };
   // Используем watch для получения текущих значений полей
   const cardHolderName = watch('cardHolderName', ''); // По умолчанию пустая строка
   const cardNumber = watch('cardNumber', '');
@@ -155,7 +149,6 @@ const { paymentData, resetPaymentData } = useFormDataStore();
                     {...field}
                     onChange={e => {
                       const inputVal = e.target.value;
-
                       // Checking card type before limiting the input
                       let matchedCardType = null;
                       for (const card of CardNumberMask) {
@@ -166,7 +159,6 @@ const { paymentData, resetPaymentData } = useFormDataStore();
                         }
                       }
                       setCardType(matchedCardType);
-
                       // Limiting the input to 16 digits
                       const formatedValue = inputVal
                         .replace(/[^0-9]/g, '')
@@ -205,9 +197,9 @@ const { paymentData, resetPaymentData } = useFormDataStore();
                     onChange={e => {
                       const inputVal = e.target.value;
                       const formatedValue = inputVal
-                        .replace(/[^0-9]/g, '')
-                        .slice(0, 4);
-
+                        .replace(/[^0-9]/g, '') // оставить только цифры
+                        .slice(0, 4) // обрезать до 4 символов
+                        .replace(/(\d{2})(?=\d)/, '$1/'); // вставить '/' после первых двух символов
                       field.onChange({
                         ...e,
                         target: {
@@ -220,15 +212,12 @@ const { paymentData, resetPaymentData } = useFormDataStore();
                     error={!!errors.expiryDate}
                     helperText={
                       errors.expiryDate &&
-                      'Please enter a valid expiry date (MMYY)'
+                      'Please enter a valid expiry date (MM/YY)'
                     }
                   />
                 )}
                 rules={{
                   required: 'This field is required',
-                  pattern: {
-                    value: /(\d{2})(\d{2})/,
-                  },
                 }}
               />
             </Grid>
@@ -270,18 +259,24 @@ const { paymentData, resetPaymentData } = useFormDataStore();
           </Grid>
 
           <Box
-            sx={{ marginBottom: '20px', textAlign: 'center', marginTop: '20px' }}
+            sx={{
+              marginBottom: '20px',
+              textAlign: 'center',
+              marginTop: '20px',
+            }}
           >
-            <FormControlLabel 
-            control={<Checkbox checked={isChecked}/>} 
-            label="Confirm your details and proceed to order" 
-            onChange={(e) => handleCheckboxChange(e)}
-            disabled={!isValid} 
-            sx={{ '& .MuiSvgIcon-root': { fontSize: 40 },
-            "& .MuiFormControlLabel-label": {
-             color: "primary.main", 
-             fontSize: "1.5rem", 
-    } }}
+            <FormControlLabel
+              control={<Checkbox checked={isChecked} />}
+              label="Confirm your details and proceed to order"
+              onChange={e => handleCheckboxChange(e)}
+              disabled={!isValid}
+              sx={{
+                '& .MuiSvgIcon-root': { fontSize: 40 },
+                '& .MuiFormControlLabel-label': {
+                  color: 'primary.main',
+                  fontSize: '1.5rem',
+                },
+              }}
             />
           </Box>
         </form>
@@ -293,6 +288,7 @@ const { paymentData, resetPaymentData } = useFormDataStore();
 PaymentForm.propTypes = {
   data: PropTypes.object,
   updateData: PropTypes.func,
+  onFormSubmitSuccess: PropTypes.func,
 };
 
 export default PaymentForm;

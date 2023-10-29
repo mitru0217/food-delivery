@@ -10,14 +10,12 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import theme from '../../../../constants/themeMui';
-import { useStoreOrder } from '../../../../zustand/store';
 import Button from '@mui/material/Button';
 import { useStore } from '../../../../zustand/store';
 
 const CheckList = () => {
   const isTablet = useMediaQuery('(min-width:768px) and (max-width:999px)');
   const isMobile = useMediaQuery(`(max-width: 767px)`);
-  // const isDesktop = useMediaQuery('(min-width:1000px)');
 
   const setBadgeCount = useStore(state => state.setBadgeCount);
 
@@ -32,10 +30,10 @@ const CheckList = () => {
   const { name, phoneNumber, city, street, number } = addressData;
 
   const [cartItems, setCartItems] = useState(
-    JSON.parse(localStorage.getItem('cartItems')) || []
+    JSON.parse(localStorage.getItem('cartItemsSubmited')) || []
   );
-  // const TotalPrice = useStoreOrder(state => state.totalPrice);
-  const setTotalPrice = useStoreOrder(state => state.setTotalPrice);
+
+  const setTotalPrice = useStore(state => state.setTotalPrice);
 
   // Проверка на заполненность всех полей
   const areAllDataFilled = useCallback(() => {
@@ -86,7 +84,6 @@ const CheckList = () => {
           padding: '2rem',
         }}
         style={{
-                // maxHeight: isMobile ? '350px' : isTablet ? '400px' : 'auto',
                 maxHeight: isMobile || isTablet ? '350px' : 'auto',
                 overflowY: isMobile || isTablet ? 'auto' : 'visible',
               }}
@@ -208,7 +205,7 @@ const CheckList = () => {
             </ListItem>
             <ListItem sx={{ padding: '0' }}>
               <Typography variant="spanSecond">
-                Expiry Date: {expiryDate.slice(0, 4).replace(/(\d{2})(\d{2})/, '$1/$2') || ''}
+                Expiry Date: {expiryDate || ''}
               </Typography>
             </ListItem>
             <ListItem sx={{ padding: '0' }}>
@@ -225,8 +222,15 @@ const CheckList = () => {
       
         </Box>
         <Divider />
-        <Button onClick={handleSubmit} disabled={isButtonDisabled}>
-          Отправить заказ
+        <Typography variant="spanSecond">
+              Check the  details and pay for the order
+              </Typography>
+        <Button 
+        onClick={handleSubmit} 
+        disabled={isButtonDisabled}
+        style={{fontSize: '1.5rem'}}
+        >
+          Pay and send order
         </Button>
       </Stack>
     </ThemeProvider>
@@ -240,12 +244,12 @@ CheckList.propTypes = {
     city: PropTypes.string,
     street: PropTypes.string,
     number: PropTypes.string,
-  }).isRequired,
+  }),
   paymentData: PropTypes.shape({
     cardNumber: PropTypes.string,
     expiryDate: PropTypes.string,
     cvv: PropTypes.string,
-  }).isRequired,
+  }),
 };
 
 export default CheckList;

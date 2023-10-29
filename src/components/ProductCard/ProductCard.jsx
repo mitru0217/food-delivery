@@ -254,14 +254,6 @@ const ProductCard = ({ product, selectedSupplier }) => {
   const setOrderedProducts = useStore((state) => state.setOrderedProducts);
   const setSelectedSuppliers = useStore((state) => state.setSelectedSuppliers);
 
-  // Восстанавливаем badgeCount из localStorage, если он там есть
-  // useEffect(() => {
-  //   const savedBadgeCount = localStorage.getItem(LOCAL_STORAGE_KEY_BADGE_COUNT );
-  //   if (savedBadgeCount !== null) {
-  //     useStore.setState({ LOCAL_STORAGE_KEY_BADGE_COUNT : parseInt(savedBadgeCount, 10) });
-  //   }
-  //   setBadgeCount(savedBadgeCount)
-  // },  [ setBadgeCount]);
   useEffect(() => {
     const savedBadgeCount = localStorage.getItem(LOCAL_STORAGE_KEY_BADGE_COUNT);
 

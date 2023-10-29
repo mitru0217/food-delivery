@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import PropTypes from 'prop-types';
 import { useMediaQuery } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
@@ -14,9 +15,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import theme from '../../../../constants/themeMui';
 import { useStore} from '../../../../zustand/store';
 import Counter from '../../../Counter/Counter';
-import { useStoreOrder } from '../../../../zustand/store';
 
-const ProductBasketForm = () => {
+const CartForm = ({ onFormSubmitSuccess  }) => {
   const [cartItems, setCartItems] = useState(
     (JSON.parse(localStorage.getItem('cartItems')) || []).map(item => ({
       ...item,
@@ -25,11 +25,10 @@ const ProductBasketForm = () => {
     }))
   );
   
-  const [isChecked, setIsChecked] = useState(
-    JSON.parse(localStorage.getItem('isChecked')) || cartItems.confirmData || false
-  );
-  const setOrderedProducts = useStoreOrder(state => state.setOrderedProducts);
-  const setTotalPrice = useStoreOrder(state => state.setTotalPrice);
+
+
+  const [isChecked, setIsChecked] = useState(false);
+  
   const setBadgeCount = useStore(state => state.setBadgeCount);
   const isTablet = useMediaQuery('(min-width:768px)');
   const isMobile = useMediaQuery(`(max-width: 767px)`);
@@ -37,33 +36,9 @@ const ProductBasketForm = () => {
 
   const {
     handleSubmit,
-    clearErrors,
-    formState: { isValid },
   } = useForm({
-    mode: 'onBlur',
     confirmData: true
   });
-
-
-  
-  useEffect(() => {
-    const handleStorageChange = (e) => {
-      if (e.key === 'cartItems') {
-        const updatedCartItems = JSON.parse(e.newValue);
-        setCartItems(updatedCartItems.map(item => ({
-          ...item,
-          quantityBadge: item.quantity,
-          totalPriceForProduct: (item.quantity * item.productInfo.price).toFixed(2),
-        })));
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
-  }, []);
-
 
   const total = cartItems.reduce(
     (sum, item) => sum + item.quantityBadge * item.productInfo.price,
@@ -106,6 +81,7 @@ const ProductBasketForm = () => {
     updatedCartItems.splice(index, 1);
     setCartItems(updatedCartItems);
     localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+    localStorage.setItem('cartItemsSubmited', JSON.stringify(updatedCartItems));
       // Обновление badgeCount в глобальном состоянии
       const updatedBadgeCount = updatedCartItems.reduce((acc, item) => acc + item.quantityBadge, 0);
       setBadgeCount(updatedBadgeCount);
@@ -114,17 +90,16 @@ const ProductBasketForm = () => {
   const onSubmit = () => {
     const updatedCartItems = [...cartItems];
     updatedCartItems.confirmData = true;
-    setCartItems(updatedCartItems);
-    localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
-    setOrderedProducts(cartItems);
-    setTotalPrice(roundedTotal);
-    clearErrors();
+    localStorage.setItem('cartItemsSubmited', JSON.stringify(updatedCartItems));
+   
+    onFormSubmitSuccess ();
   };
 
   const handleCheckboxChange = e => {
     setIsChecked(e.target.checked);
     if (e.target.checked) {
       handleSubmit(onSubmit)();
+     
     }
   };
 
@@ -254,7 +229,6 @@ const ProductBasketForm = () => {
                     control={<Checkbox checked={isChecked} />}
                     label="Confirm your details and proceed to payment"
                     onChange={e => handleCheckboxChange(e)}
-                    disabled={!isValid}
                     sx={{
                       '& .MuiSvgIcon-root': { fontSize: 40 },
                       '& .MuiFormControlLabel-label': {
@@ -273,4 +247,9 @@ const ProductBasketForm = () => {
   );
 };
 
-export default ProductBasketForm;
+CartForm.propTypes = {
+  onFormSubmitSuccess: PropTypes.func.isRequired,
+};
+
+
+export default CartForm;

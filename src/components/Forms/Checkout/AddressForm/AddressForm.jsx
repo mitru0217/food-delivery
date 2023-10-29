@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState} from 'react';
 import PropTypes from 'prop-types';
 import { useForm, Controller } from 'react-hook-form';
 import { ThemeProvider } from '@mui/material/styles';
@@ -17,8 +17,8 @@ import cities from '../../../../constants/cities';
 import { getStreets, getHouseNumbersForStreet} from '../../../../constants/cityData'
 import { useFormDataStore } from '../../../../zustand/store';
 
-const AddressForm = () => {
-  const { addressData, resetAddressData } = useFormDataStore();
+const AddressForm = ({onFormSubmitSuccess }) => {
+  const { addressData } = useFormDataStore();
 
   const [storedData, setStoredData] = useState(() => {
     const savedData = localStorage.getItem('addressData');
@@ -27,7 +27,7 @@ const AddressForm = () => {
     }
     return addressData;
   });
-  const [isChecked, setIsChecked] = useState( false);
+  const [isChecked, setIsChecked] = useState(false);
   const {
     control,
     setValue,
@@ -76,12 +76,13 @@ const numberOptions = numbersForSelectedStreet.map(number => ({
     localStorage.setItem('addressData', JSON.stringify(data));
     setStoredData(data);
     clearErrors();
-   
+    onFormSubmitSuccess() 
   };
 const handleCheckboxChange = (e) => {
   setIsChecked(e.target.checked);
   if (e.target.checked) {
     handleSubmit(onSubmit)();
+    
   }
 }
 
@@ -228,6 +229,7 @@ const handleCheckboxChange = (e) => {
 AddressForm.propTypes = {
   data: PropTypes.object,
   updateData: PropTypes.func,
+  onFormSubmitSuccess: PropTypes.func.isRequired,
 };
 
 export default AddressForm;
