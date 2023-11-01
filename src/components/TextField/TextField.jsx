@@ -16,8 +16,10 @@ const CustomTextField = forwardRef(
     return (
       <ThemeProvider theme={baseTheme}>
      <FormControl ref={ref}>
+    
         <TextField
          autoComplete="off" 
+         sx={{ m: 1, width: '100%' }}
           id={id}
           label={
             <span
