@@ -1,7 +1,4 @@
-
-import styled from '@emotion/styled'
-
-
+import styled from '@emotion/styled';
 
 export const Container = styled.div`
   display: flex;
@@ -18,7 +15,7 @@ export const Card = styled.div`
   transform-style: preserve-3d;
   transition: transform 0.5s;
   cursor: pointer;
-  
+
   transform: ${props =>
     props.isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)'};
 `;
@@ -31,35 +28,33 @@ export const CardInner = styled.div`
 
 export const Front = styled(CardInner)`
   position: relative;
-  max-width: 400px;
+  max-width: 40rem;
   width: 100%;
-  height: 250px;
+  height: 25rem;
   box-shadow: 1px 5px 6px 0px black;
-  border-radius: 22px;
-  color: #ffffff;
+  border-radius: ${p => p.theme.radii.cardStandart};
+  color: ${p => p.theme.colors.mainWhite};
   transform: rotateY(0deg);
-
 `;
 export const Back = styled(CardInner)`
   position: relative;
-  max-width: 400px;
+  max-width: 40rem;
   width: 100%;
-  height: 250px;
+  height: 25rem;
   box-shadow: 1px 5px 6px 0px black;
-  border-radius: 22px;
-  color: #ffffff;
-  background-color: #616161;
+  border-radius: ${p => p.theme.radii.cardStandart};
+  color: ${p => p.theme.colors.mainWhite};
+  background-color: ${p => p.theme.colors.creditBg};
   transform: rotateY(180deg);
   padding-top: 3.5rem;
-
 `;
 
 export const Up = styled.div`
   width: 100;
   height: 50%;
   padding: 3rem;
-  border-top-right-radius: 22px;
-  border-top-left-radius: 22px;
+  border-top-right-radius: ${p => p.theme.radii.cardStandart};
+  border-top-left-radius: ${p => p.theme.radii.cardStandart};
   transition: background-color 0.5s;
 `;
 export const Down = styled.div`
@@ -67,14 +62,14 @@ export const Down = styled.div`
   height: 50%;
   padding-left: 3rem;
   padding-right: 3rem;
-  border-bottom-right-radius: 22px;
-  border-bottom-left-radius: 22px;
+  border-bottom-right-radius: ${p => p.theme.radii.cardStandart};
+  border-bottom-left-radius: ${p => p.theme.radii.cardStandart};
   transition: background-color 0.5s;
 `;
 export const Chip = styled.div`
   width: 5rem;
   height: 3.5rem;
-  border-radius: 10px;
+  border-radius: ${p => p.theme.radii.btnStandart};
   align-items: center;
 `;
 
@@ -101,7 +96,7 @@ export const NumberText = styled.span`
 export const NameText = styled.span`
   position: absolute;
   font-weight: 500;
- font-size: 1.5rem;
+  font-size: 1.5rem;
   top: 68%;
   z-index: 4;
 `;
@@ -112,7 +107,6 @@ export const CardNumber = styled.span`
   font-weight: 500;
   font-size: 3.75rem;
   z-index: 4;
- 
 `;
 export const Name = styled.span`
   position: absolute;
@@ -122,7 +116,6 @@ export const Name = styled.span`
   font-size: 2.5rem;
   text-transform: uppercase;
   z-index: 4;
- 
 `;
 export const Expiration = styled(NameText)`
   right: 10%;
@@ -132,8 +125,7 @@ export const ExpirationDate = styled.span`
   z-index: 4;
   top: 76%;
   right: 10%;
- font-size: 2.5rem;
-
+  font-size: 2.5rem;
 `;
 export const Strip = styled.div`
   width: 100%;
@@ -156,7 +148,7 @@ export const WrapperName = styled.div`
   background-color: #c0c0c0;
 `;
 export const BackName = styled.span`
-  color: black;
+  color: #000000;
   font-family: 'Rock Salt', cursive;
   font-size: 2rem;
 `;
@@ -168,7 +160,7 @@ export const CodeWrapper = styled.div`
 `;
 export const Cvv = styled.span`
   font-size: 2rem;
-  color: black;
+  color: #000000;
 `;
 
 export const Label = styled.div`
@@ -190,19 +182,4 @@ export const CardIcon = styled.img`
   right: 12%;
   top: 12%;
   z-index: 4;
-  
-`;
-export const RandomButton = styled.button`
-  width: auto;
-
-  padding: 10px;
-  border: none;
-  border-radius: 8px;
-  background-color: #bdbdbd;
-  color: #ffffff;
-  &:hover,
-  &:focus {
-    transition: background-color 0.5s;
-    background-color: #616161;
-  }
 `;

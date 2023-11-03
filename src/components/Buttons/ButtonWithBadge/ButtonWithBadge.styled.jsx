@@ -9,9 +9,9 @@ export const Badge = styled.span`
   align-items: center;
   width: 2rem;
   height:2rem;
-  background-color: red;
+  background-color: ${p => p.theme.colors.mainRed};
   font-size: 1.25rem;
-  color: white;
+  color: ${p => p.theme.colors.mainWhite};
   border-radius: 50%;
-  padding: 3px 6px;
+  padding: .3rem .6rem;
 `;

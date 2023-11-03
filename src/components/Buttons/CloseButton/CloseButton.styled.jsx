@@ -21,13 +21,8 @@ export const ButtonStyled = styled.button`
   height: 5rem;
   }
 `;
-
 export const CloseIcon = styled(AiOutlineCloseCircle)`
   width: 100%;
   height: 100%;
   color: ${p => p.theme.colors.mainWhite};
-  transition: color 0.3s ease;
-  /* &:hover {
-    color: ${p => p.theme.colors.btnHover};
-  } */
   `

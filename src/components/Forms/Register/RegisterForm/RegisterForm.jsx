@@ -1,31 +1,39 @@
 import { useState, useEffect } from 'react';
-
+import { easeIn } from 'framer-motion';
 import {
   Container,
   Overlay,
   FormContainer,
-  Form,
+  Wrapper,
   FormHeading,
   FormText,
-  FormField,
-  FormButton,
   OverlayHeading,
   OverlayText,
 } from './RegisterForm.styled';
-import { easeIn } from 'framer-motion';
 
+import FormButton from '../../../Buttons/AnimatedButton';
+import SignInForm from '../SignInForm';
+import SignUpForm from '../SignUpForm';
 const RegisterForm = () => {
   const [isSignUp, setIsSignUp] = useState(true);
   const [showForm, setShowForm] = useState(true);
+  const [showOverlay, setShowOverlay] = useState(true);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setShowOverlay(isSignUp);
+    }, 300);
+
+    return () => clearTimeout(timeout);
+  }, [isSignUp]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
       setShowForm(isSignUp);
     }, 500);
-  
+
     return () => clearTimeout(timeout);
   }, [isSignUp]);
-
 
   const toggleSignUpSignIn = () => {
     setIsSignUp(!isSignUp);
@@ -36,16 +44,36 @@ const RegisterForm = () => {
       x: '186%',
       backgroundColor: '#ffff',
       transition: {
-        duration: 1,
-        ease: [0.43, 0.13, 0.23, 0.96],
+        x: {
+          delay: 1,
+          duration: 1,
+          ease: [0.43, 0.13, 0.23, 0.96],
+        },
+        backgroundColor: {
+          delay: 0.3,
+          duration: 1,
+          ease: [0.43, 0.13, 0.23, 0.96],
+        },
       },
     },
     signIn: {
       x: '0',
       backgroundColor: '#2980b9',
+      color: '#ffff',
       transition: {
-        duration: 1, 
-        ease: [0.43, 0.13, 0.23, 0.96], 
+        x: {
+          delay: 0.5,
+          duration: 1,
+          ease: [0.43, 0.13, 0.23, 0.96],
+        },
+        backgroundColor: {
+          duration: 1,
+          ease: [0.43, 0.13, 0.23, 0.96],
+        },
+        color: {
+          duration: 1,
+          ease: [0.43, 0.13, 0.23, 0.96],
+        },
       },
     },
   };
@@ -54,57 +82,59 @@ const RegisterForm = () => {
     signUp: {
       x: '0',
       backgroundColor: '#2980b9',
+      color: '#ffff',
       transition: {
-        duration: 0.8,
-        delay: 0.3, 
-        ease: easeIn, 
+        duration: 1,
+        delay: 0.3,
+        ease: easeIn,
       },
     },
     signIn: {
       x: '53.9%',
       backgroundColor: '#ffff',
+      color: '#2980b9',
       transition: {
-        duration: 0.8,
-        delay: 0.3,  
-        ease: easeIn, 
+        duration: 1,
+        delay: 0.3,
+        ease: easeIn,
       },
     },
   };
 
-const buttonFormVariants = {
-  signUp: {
-    backgroundColor: '#ffff',
-    color: '#2980b9', 
-    transition: {
-      duration: 0.8, 
-      ease: [0.43, 0.13, 0.23, 0.96], 
+  const buttonFormVariants = {
+    signUp: {
+      backgroundColor: '#ffff',
+      color: '#2980b9',
+      transition: {
+        duration: 0.8,
+        ease: [0.43, 0.13, 0.23, 0.96],
+      },
     },
-  },
-  signIn: {
-    backgroundColor: '#2980b9',
-    transition: {
-      duration: 0.8, 
-      ease: [0.43, 0.13, 0.23, 0.96], 
+    signIn: {
+      backgroundColor: '#2980b9',
+      color: '#ffff',
+      transition: {
+        duration: 0.8,
+        ease: [0.43, 0.13, 0.23, 0.96],
+      },
     },
-
-  },
-};
+  };
 
   const buttonOverlayVariants = {
     signUp: {
       backgroundColor: '#2980b9',
       color: '#ffff',
       transition: {
-        duration: 0.8, 
-        ease: [0.43, 0.13, 0.23, 0.96], 
+        duration: 0.8,
+        ease: [0.43, 0.13, 0.23, 0.96],
       },
     },
     signIn: {
       backgroundColor: '#ffff',
-      color: '#2980b9', 
+      color: '#2980b9',
       transition: {
-        duration: 0.8, 
-        ease: [0.43, 0.13, 0.23, 0.96], 
+        duration: 0.8,
+        ease: [0.43, 0.13, 0.23, 0.96],
       },
     },
   };
@@ -117,36 +147,25 @@ const buttonFormVariants = {
         variants={FormVariants}
       >
         {showForm ? (
-          <Form>
+          <Wrapper>
             <FormHeading>Sign In</FormHeading>
             <a href="#">Sign In with Google</a>
             <FormText>or use your account</FormText>
-            <FormField type="email" placeholder="email" />
-            <FormField type="password" placeholder="password" />
-            <FormText>Forgot your password?</FormText>
-            <FormButton
-              initial={isSignUp ? 'signUp' : 'signIn'}
-              animate={isSignUp ? 'signUp' : 'signIn'}
-              variants={buttonFormVariants}
-              type="submit"
-            >
-              Sign In
-            </FormButton>
-          </Form>
+            <SignInForm
+              isSignUp={isSignUp}
+              buttonFormVariants={buttonFormVariants}
+            />
+          </Wrapper>
         ) : (
-          <Form>
+          <Wrapper>
             <FormHeading>Create Account</FormHeading>
             <a href="#">Sign In with Google</a>
             <FormText>or use your email for registration</FormText>
-            <FormField type="text" placeholder="name" />
-            <FormField type="email" placeholder="email" />
-            <FormField type="password" placeholder="password" />
-            <FormButton 
-              initial={isSignUp ? 'signIn' : 'signUp'}
-              animate={isSignUp ? 'signIn' : 'signUp'}
-              variants={buttonFormVariants}
-            type="submit">Sign Up</FormButton>
-          </Form>
+            <SignUpForm
+              isSignUp={isSignUp}
+              buttonFormVariants={buttonFormVariants}
+            />
+          </Wrapper>
         )}
       </FormContainer>
       <Overlay
@@ -154,7 +173,7 @@ const buttonFormVariants = {
         animate={isSignUp ? 'signUp' : 'signIn'}
         variants={OverlayVariants}
       >
-        {isSignUp ? (
+        {showOverlay ? (
           <div>
             <OverlayHeading>Hello Friend</OverlayHeading>
             <OverlayText>
@@ -172,7 +191,7 @@ const buttonFormVariants = {
         <FormButton
           onClick={toggleSignUpSignIn}
           initial={isSignUp ? 'signIn' : 'signUp'}
-              animate={isSignUp ? 'signIn' : 'signUp'}
+          animate={isSignUp ? 'signIn' : 'signUp'}
           variants={buttonOverlayVariants}
           type="button"
         >

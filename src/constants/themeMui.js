@@ -1,8 +1,8 @@
 import { createTheme } from '@mui/material/styles';
-import { green,red, indigo, teal } from '@mui/material/colors';
+import { green, red, indigo, teal } from '@mui/material/colors';
 
 const baseTheme = createTheme({
-    palette: {
+  palette: {
     primary: {
       main: '#00a2e5',
     },
@@ -28,10 +28,10 @@ const theme = createTheme({
     h1: {
       fontSize: '2rem',
       color: baseTheme.palette.primary.main,
- 
+
       [baseTheme.breakpoints.up('desktop')]: {
         fontSize: '3rem',
-      }
+      },
     },
     h2: {
       fontSize: '1.5rem',
@@ -59,13 +59,13 @@ const theme = createTheme({
         fontSize: '1.8rem',
       },
     },
-h5: {
+    h5: {
       fontSize: '1rem',
       color: baseTheme.palette.secondary.indigo,
       [baseTheme.breakpoints.up('desktop')]: {
         fontSize: '1.4rem',
       },
-},
+    },
 
     span: {
       color: baseTheme.palette.secondary.text,
@@ -87,11 +87,8 @@ h5: {
       [baseTheme.breakpoints.up('desktop')]: {
         fontSize: '2rem',
       },
-
-    }
+    },
   },
 });
-
-
 
 export default theme;

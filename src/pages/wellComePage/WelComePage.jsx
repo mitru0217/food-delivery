@@ -1,5 +1,4 @@
 import { useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
 import { Container } from './WelComePage.styled';
 import PrimaryButton from '../../components/Buttons/PrimaryButton';
 import RegisterModal from '../../components/Modals/RegisterModal';
@@ -34,7 +33,3 @@ const WelComePage = () => {
 
 export default WelComePage;
 
-  // const navigate = useNavigate();
-  // const handleClick = () => {
-  //   navigate('/home');
-  // };

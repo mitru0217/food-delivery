@@ -41,5 +41,25 @@ export const useFormDataStore = create(set => ({
   resetPaymentData: () => set({ paymentData: { cardHolderName: '', cardNumber: '', expiryDate: '', cvv: '' } }),
 }));
 
-
+export const useAuthStore = create(set => ({
+  user: {},
+  loading: true,
+  setUser: async user => {
+    set({ loading: true });
+    set({ user, loading: false });
+  },
+  setAvatar: (avatar) => {
+    set((state) => ({
+      user: { ...state.user, avatar },
+      loading: false,
+    }));
+  },
+  logOut: () => set({ user: {} }),
+  removeAvatar: () => {
+    set((state) => ({
+      user: { ...state.user, avatar: null },
+      loading: false,
+    }));
+  },
+}));
 

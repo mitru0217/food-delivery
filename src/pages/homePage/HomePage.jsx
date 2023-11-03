@@ -1,5 +1,6 @@
 
 import { Suspense, useState, useEffect } from 'react';
+// import { Redirect } from 'react-router-dom';
 import Loader from '../../components/Loader';
 import Container from '../../components/Container';
 import SupplierCard from '../../components/SupplierCard';
@@ -8,7 +9,8 @@ import ModalForProduct from '../../components/Modals/ModalForProduct';
 import ModalForOrder from '../../components/Modals/ModalForOrder';
 import Header from '../../components/Header';
 import suppliers from '../../constants/suppliers';
-import { useStore } from '../../zustand/store';
+import { useStore, useAuthStore } from '../../zustand/store';
+
 
 const LOCAL_STORAGE_KEY_BADGE_COUNT = 'badgeCount';
 
@@ -17,22 +19,40 @@ const HomePage = () => {
   const [selectedSupplier, setSelectedSupplier] = useState(null);
   const [isProductModalOpen, setProductModalOpen] = useState(false);
   const setBadgeCount = useStore((state) => state.setBadgeCount);
+  const { user, loading } = useAuthStore();
 
-  // Восстанавливаем badgeCount из localStorage, если он там есть
   useEffect(() => {
-    const savedBadgeCount = localStorage.getItem(LOCAL_STORAGE_KEY_BADGE_COUNT);
-    const parsedBadgeCount = parseInt(savedBadgeCount, 10);
-  
-    if (!isNaN(parsedBadgeCount)) {
-      useStore.setState({ LOCAL_STORAGE_KEY_BADGE_COUNT: parsedBadgeCount });
-      setBadgeCount(parsedBadgeCount);
+    if (isProductModalOpen || isOrderModalOpen) {
+      document.body.style.overflow = 'hidden';
     } else {
-      // Если в локальном хранилище нет значения, установливаем BadgeCount в 0
-      useStore.setState({ LOCAL_STORAGE_KEY_BADGE_COUNT: 0 });
-      setBadgeCount(0);
+      document.body.style.overflow = 'visible';
     }
-  
-  }, [setBadgeCount]);
+  }, [isProductModalOpen, isOrderModalOpen]);
+
+
+      // Восстанавливаем badgeCount из localStorage, если он там есть
+      useEffect(() => {
+        const savedBadgeCount = localStorage.getItem(LOCAL_STORAGE_KEY_BADGE_COUNT);
+        const parsedBadgeCount = parseInt(savedBadgeCount, 10);
+      
+        if (!isNaN(parsedBadgeCount)) {
+          useStore.setState({ LOCAL_STORAGE_KEY_BADGE_COUNT: parsedBadgeCount });
+          setBadgeCount(parsedBadgeCount);
+        } else {
+          // Если в локальном хранилище нет значения, установливаем BadgeCount в 0
+          useStore.setState({ LOCAL_STORAGE_KEY_BADGE_COUNT: 0 });
+          setBadgeCount(0);
+        }
+      
+      }, [setBadgeCount]);
+
+  if (loading) {
+    return <Loader />; // Пока идет загрузка, показываем лоадер
+  }
+
+  // if (!user || !user.name) {
+  //   return <Redirect to="/" />;
+  // }
 
   // Обработчик клика по поставщику
   const handleSupplierClick = (supplier) => {
@@ -57,14 +77,6 @@ const HomePage = () => {
     setSelectedSupplier(null);
     setProductModalOpen(false);
   };
-
-  useEffect(() => {
-    if (isProductModalOpen || isOrderModalOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'visible';
-    }
-  }, [isProductModalOpen, isOrderModalOpen]);
 
   return (
     <Suspense fallback={<Loader />}>

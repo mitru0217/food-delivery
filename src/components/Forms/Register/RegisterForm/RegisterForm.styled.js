@@ -18,14 +18,13 @@ export const Overlay = styled(motion.div)`
   position: relative;
   display: flex;
   flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  justify-content: center;
+  align-items: center;
   width: 35%;
   z-index: 1;
   padding: 2rem;
   box-shadow: 1px 3px 10px rgba(0, 0, 0, 0.25);
   border-radius: 3px;
-
 `;
 export const FormContainer = styled(motion.div)`
   position: absolute;
@@ -40,7 +39,7 @@ export const FormContainer = styled(motion.div)`
   border: 1px solid green;
 `;
 
-export const Form = styled.form`
+export const Wrapper = styled.div`
   width: 100%;
 `;
 export const FormHeading = styled.h3`
@@ -59,13 +58,6 @@ export const FormField = styled.input`
   margin-bottom: 15px;
   background: #f4f8f7;
   border: none;
-`;
-export const FormButton = styled(motion.button)`
-  padding: 10px 30px;
-  border: none;
-  border-radius: 30px;
-  font-size: 16px;
-  color: #fff;
 `;
 export const OverlayHeading = styled.h2`
   font-size: 4rem;

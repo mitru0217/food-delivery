@@ -1,27 +1,29 @@
-
 import PropTypes from 'prop-types';
-import { HeaderStyled, BtnWrapper } from './Header.styled';
+import { HeaderStyled, BtnWrapper, HeaderContainer } from './Header.styled';
 import Button from '../Buttons/SecondaryButton';
 import ButtonWithBadge from '../Buttons/ButtonWithBadge/ButtonWithBadge';
-import { useStore} from '../../zustand/store';
-import { AiOutlineShoppingCart, AiOutlineUserAdd } from 'react-icons/ai';
+import { useStore } from '../../zustand/store';
+import { AiOutlineShoppingCart } from 'react-icons/ai';
 
+import UserProfile from '../UserProfile/UserProfile';
 const Header = ({ onClick }) => {
-
-  const badgeCount = useStore((state) => state.badgeCount);
+  const badgeCount = useStore(state => state.badgeCount);
 
   return (
     <HeaderStyled>
-      <BtnWrapper>
-        <Button>Shop</Button>
-        <ButtonWithBadge text="Button" onClick={onClick} badgeCount={badgeCount}>
-          <AiOutlineShoppingCart />
-        </ButtonWithBadge>
-        <Button>
-          <AiOutlineUserAdd />
-          Log In
-        </Button>
-      </BtnWrapper>
+      <HeaderContainer>
+        <BtnWrapper>
+          <Button>Shop</Button>
+          <ButtonWithBadge
+            text="Button"
+            onClick={onClick}
+            badgeCount={badgeCount}
+          >
+            <AiOutlineShoppingCart />
+          </ButtonWithBadge>
+        </BtnWrapper>
+        <UserProfile />
+      </HeaderContainer>
     </HeaderStyled>
   );
 };
@@ -30,4 +32,3 @@ Header.propTypes = {
 };
 
 export default Header;
-
