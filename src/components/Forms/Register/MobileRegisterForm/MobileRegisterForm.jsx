@@ -1,5 +1,3 @@
-
-
 import { useState, useEffect } from 'react';
 import { easeIn } from 'framer-motion';
 import {
@@ -10,15 +8,11 @@ import {
   FormText,
   Overlay,
   OverlayText,
-  FormButton
+  FormButton,
 } from './MobileRegisterForm.styled';
 
-// import FormButton from '../../../Buttons/AnimatedButton/';
 import SignInForm from '../SignInForm';
 import SignUpForm from '../SignUpForm';
-
-
-
 
 const MobileRegisterForm = () => {
   const [isSignUp, setIsSignUp] = useState(true);
@@ -33,14 +27,13 @@ const MobileRegisterForm = () => {
     return () => clearTimeout(timeout);
   }, [isSignUp]);
 
-useEffect(() => {
+  useEffect(() => {
     const timeout = setTimeout(() => {
       setShowOverlay(isSignUp);
     }, 300);
 
     return () => clearTimeout(timeout);
   }, [isSignUp]);
-
 
   const toggleSignUpSignIn = () => {
     setIsSignUp(!isSignUp);
@@ -50,17 +43,16 @@ useEffect(() => {
     signUp: {
       backgroundColor: '#29b96c',
       transition: {
-          delay: 0.3,
-          duration: 1,
-          ease: easeIn,
-        
+        delay: 0.3,
+        duration: 1,
+        ease: easeIn,
       },
     },
     signIn: {
       backgroundColor: '#2980b9',
       transition: {
-          duration: 1,
-          ease: easeIn,
+        duration: 1,
+        ease: easeIn,
       },
     },
   };
@@ -71,7 +63,7 @@ useEffect(() => {
       opacity: [0, 1],
       transition: {
         y: { duration: 1, ease: easeIn },
-        opacity: { duration: .1 },
+        opacity: { duration: 0.1 },
       },
     },
     signIn: {
@@ -79,12 +71,10 @@ useEffect(() => {
       opacity: [0, 1],
       transition: {
         y: { duration: 1, ease: easeIn },
-        opacity: { duration: .1 },
+        opacity: { duration: 0.1 },
       },
     },
   };
-
-
 
   const buttonFormVariants = {
     signUp: {
@@ -104,8 +94,6 @@ useEffect(() => {
       },
     },
   };
-
-
 
   return (
     <Container>
@@ -136,14 +124,13 @@ useEffect(() => {
           </Wrapper>
         )}
       </FormContainer>
-  
+
       <Overlay
         initial={isSignUp ? 'signUp' : 'signIn'}
         animate={isSignUp ? 'signUp' : 'signIn'}
         variants={OverlayVariants}
       >
-   
-   {showOverlay ? (
+        {showOverlay ? (
           <div>
             <OverlayText>
               Enter your personal details and start journey with us
@@ -151,47 +138,17 @@ useEffect(() => {
           </div>
         ) : (
           <div>
-            
             <OverlayText>
               Keep connected with us please login with your personal info
             </OverlayText>
           </div>
         )}
-        <FormButton
-          onClick={toggleSignUpSignIn}
-          type="button"
-        >
+        <FormButton onClick={toggleSignUpSignIn} type="button">
           {isSignUp ? 'Sign Up' : 'Sign In'}
         </FormButton>
       </Overlay>
-   
-      
-     
     </Container>
   );
 };
 
-export default MobileRegisterForm ;
-
-  // const FormVariants = {
-  //   signUp: {
-  //     x: '0',
-  //     y: '0',
-  //     transition: {
-  //       y: ['0', '100%'],
-  //       duration: 1,
-  //       delay: 0.3,
-  //       ease: easeIn,
-  //     },
-  //   },
-  //   signIn: {
-  //     x: '0',
-  //     y: '0',
-  //     transition: {
-  //       y: ['100%', '0'],
-  //       duration: 1,
-  //       delay: 0.3,
-  //       ease: easeIn,
-  //     },
-  //   },
-  // };
+export default MobileRegisterForm;

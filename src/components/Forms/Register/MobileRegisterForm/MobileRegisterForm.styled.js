@@ -13,9 +13,7 @@ export const Container = styled.div`
   position: relative;
   border-radius: 10px;
   font-family: 'Roboto', sans-serif;
-
 `;
-
 
 export const FormContainer = styled(motion.div)`
   position: absolute;
@@ -25,11 +23,9 @@ export const FormContainer = styled(motion.div)`
   flex-direction: column;
   width: 100%;
   height: 78%;
-padding-top: 2rem;
+  padding-top: 2rem;
   text-align: center;
-
 `;
-
 
 export const Overlay = styled(motion.div)`
   position: relative;
@@ -44,7 +40,6 @@ export const Overlay = styled(motion.div)`
   border-radius: 3px;
   color: '#ffff';
 `;
-
 
 export const Wrapper = styled.div`
   width: 100%;
