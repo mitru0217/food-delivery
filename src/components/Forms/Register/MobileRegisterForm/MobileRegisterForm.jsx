@@ -1,34 +1,29 @@
+
+
 import { useState, useEffect } from 'react';
 import { easeIn } from 'framer-motion';
 import {
   Container,
-  Overlay,
   FormContainer,
   Wrapper,
   FormHeading,
   FormText,
-  OverlayHeading,
+  Overlay,
   OverlayText,
-} from './RegisterForm.styled';
+  FormButton
+} from './MobileRegisterForm.styled';
 
-import FormButton from '../../../Buttons/AnimatedButton';
+// import FormButton from '../../../Buttons/AnimatedButton/';
 import SignInForm from '../SignInForm';
 import SignUpForm from '../SignUpForm';
 
 
 
-const RegisterForm = () => {
+
+const MobileRegisterForm = () => {
   const [isSignUp, setIsSignUp] = useState(true);
   const [showForm, setShowForm] = useState(true);
   const [showOverlay, setShowOverlay] = useState(true);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setShowOverlay(isSignUp);
-    }, 300);
-
-    return () => clearTimeout(timeout);
-  }, [isSignUp]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -38,71 +33,58 @@ const RegisterForm = () => {
     return () => clearTimeout(timeout);
   }, [isSignUp]);
 
+useEffect(() => {
+    const timeout = setTimeout(() => {
+      setShowOverlay(isSignUp);
+    }, 300);
+
+    return () => clearTimeout(timeout);
+  }, [isSignUp]);
+
+
   const toggleSignUpSignIn = () => {
     setIsSignUp(!isSignUp);
   };
 
   const OverlayVariants = {
     signUp: {
-      x: '186%',
-      backgroundColor: '#ffff',
+      backgroundColor: '#29b96c',
       transition: {
-        x: {
-          delay: 1,
-          duration: 1,
-          ease: [0.43, 0.13, 0.23, 0.96],
-        },
-        backgroundColor: {
           delay: 0.3,
           duration: 1,
-          ease: [0.43, 0.13, 0.23, 0.96],
-        },
+          ease: easeIn,
+        
       },
     },
     signIn: {
-      x: '0',
       backgroundColor: '#2980b9',
-      color: '#ffff',
       transition: {
-        x: {
-          delay: 0.5,
           duration: 1,
-          ease: [0.43, 0.13, 0.23, 0.96],
-        },
-        backgroundColor: {
-          duration: 1,
-          ease: [0.43, 0.13, 0.23, 0.96],
-        },
-        color: {
-          duration: 1,
-          ease: [0.43, 0.13, 0.23, 0.96],
-        },
+          ease: easeIn,
       },
     },
   };
 
   const FormVariants = {
     signUp: {
-      x: '0',
-      backgroundColor: '#2980b9',
-      color: '#ffff',
+      y: ['100%', '0%'],
+      opacity: [0, 1],
       transition: {
-        duration: 1,
-        delay: 0.3,
-        ease: easeIn,
+        y: { duration: 1, ease: easeIn },
+        opacity: { duration: .1 },
       },
     },
     signIn: {
-      x: '53.9%',
-      backgroundColor: '#ffff',
-      color: '#2980b9',
+      y: ['-100%', '0%'],
+      opacity: [0, 1],
       transition: {
-        duration: 1,
-        delay: 0.3,
-        ease: easeIn,
+        y: { duration: 1, ease: easeIn },
+        opacity: { duration: .1 },
       },
     },
   };
+
+
 
   const buttonFormVariants = {
     signUp: {
@@ -123,24 +105,7 @@ const RegisterForm = () => {
     },
   };
 
-  const buttonOverlayVariants = {
-    signUp: {
-      backgroundColor: '#2980b9',
-      color: '#ffff',
-      transition: {
-        duration: 0.8,
-        ease: [0.43, 0.13, 0.23, 0.96],
-      },
-    },
-    signIn: {
-      backgroundColor: '#ffff',
-      color: '#2980b9',
-      transition: {
-        duration: 0.8,
-        ease: [0.43, 0.13, 0.23, 0.96],
-      },
-    },
-  };
+
 
   return (
     <Container>
@@ -171,21 +136,22 @@ const RegisterForm = () => {
           </Wrapper>
         )}
       </FormContainer>
+  
       <Overlay
         initial={isSignUp ? 'signUp' : 'signIn'}
         animate={isSignUp ? 'signUp' : 'signIn'}
         variants={OverlayVariants}
       >
-        {showOverlay ? (
+   
+   {showOverlay ? (
           <div>
-            <OverlayHeading>Hello Friend</OverlayHeading>
             <OverlayText>
               Enter your personal details and start journey with us
             </OverlayText>
           </div>
         ) : (
           <div>
-            <OverlayHeading>Welcome Back!</OverlayHeading>
+            
             <OverlayText>
               Keep connected with us please login with your personal info
             </OverlayText>
@@ -193,16 +159,39 @@ const RegisterForm = () => {
         )}
         <FormButton
           onClick={toggleSignUpSignIn}
-          initial={isSignUp ? 'signIn' : 'signUp'}
-          animate={isSignUp ? 'signIn' : 'signUp'}
-          variants={buttonOverlayVariants}
           type="button"
         >
           {isSignUp ? 'Sign Up' : 'Sign In'}
         </FormButton>
       </Overlay>
+   
+      
+     
     </Container>
   );
 };
 
-export default RegisterForm;
+export default MobileRegisterForm ;
+
+  // const FormVariants = {
+  //   signUp: {
+  //     x: '0',
+  //     y: '0',
+  //     transition: {
+  //       y: ['0', '100%'],
+  //       duration: 1,
+  //       delay: 0.3,
+  //       ease: easeIn,
+  //     },
+  //   },
+  //   signIn: {
+  //     x: '0',
+  //     y: '0',
+  //     transition: {
+  //       y: ['100%', '0'],
+  //       duration: 1,
+  //       delay: 0.3,
+  //       ease: easeIn,
+  //     },
+  //   },
+  // };

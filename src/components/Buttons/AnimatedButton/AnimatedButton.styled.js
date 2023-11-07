@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
   padding: 1rem 3rem;
   border-radius: 3rem;
   font-size: 2rem;
+  margin-top: 1rem;
   text-decoration: underline;
 `;
 

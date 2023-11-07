@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useForm, Controller } from 'react-hook-form';
+import { useMediaQuery } from 'react-responsive';
 import { ThemeProvider } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
 import CustomTextField from '../../../TextField/TextField';
@@ -12,6 +13,7 @@ import { Box } from '@material-ui/core';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import { MdEmail, MdVisibility, MdVisibilityOff } from 'react-icons/md';
+import baseTheme from '../../../../constants/themeMui';
 
 const SignInForm = ({ isSignUp, buttonFormVariants }) => {
   const { user } = useAuthStore();
@@ -19,6 +21,8 @@ const SignInForm = ({ isSignUp, buttonFormVariants }) => {
   const navigate = useNavigate();
   const handleClickShowPassword = () => setShowPassword(show => !show);
 
+  const isMobile = useMediaQuery({ maxWidth: 767 })
+  const defaultColor = baseTheme.palette.primary.main;
   const {
     control,
     handleSubmit,
@@ -60,7 +64,7 @@ const SignInForm = ({ isSignUp, buttonFormVariants }) => {
                 <CustomTextField
                   {...field}
                   label="Email"
-                  labelStyle={{ color: '#ffff' }}
+                  labelStyle={{ color: isMobile ? defaultColor : '#ffff' }}
                   error={!!errors.email}
                   helperText={errors.email && 'Please enter a valid email'}
                   InputProps={{
@@ -94,7 +98,7 @@ const SignInForm = ({ isSignUp, buttonFormVariants }) => {
                   {...field}
                   label="Password"
                   type={showPassword ? 'text' : 'password'}
-                  labelStyle={{ color: '#ffff' }}
+                  labelStyle={{ color: isMobile ? defaultColor : '#ffff' }}
                   error={!!errors.password}
                   minLength={8}
                   helperText={

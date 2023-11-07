@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useForm, Controller } from 'react-hook-form';
+import { useMediaQuery } from 'react-responsive';
 import { ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import CustomTextField from '../../../TextField/TextField';
@@ -18,6 +19,7 @@ const SignUpForm = ({ isSignUp, buttonFormVariants }) => {
   const { user, setUser } = useAuthStore();
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const isMobile = useMediaQuery({ maxWidth: 767 })
 
   const handleClickShowPassword = () => setShowPassword(show => !show);
   const handleMouseDownPassword = event => {
@@ -79,6 +81,7 @@ const SignUpForm = ({ isSignUp, buttonFormVariants }) => {
                     ),
                     style: {
                       fontSize: '2rem',
+                      color: isMobile ? '#ffff' : '#000000'
                     },
                   }}
                 />
@@ -110,6 +113,7 @@ const SignUpForm = ({ isSignUp, buttonFormVariants }) => {
                     ),
                     style: {
                       fontSize: '2rem',
+                      color: isMobile ? '#ffff' : '#000000'
                     },
                   }}
                 />
@@ -152,6 +156,7 @@ const SignUpForm = ({ isSignUp, buttonFormVariants }) => {
                     ),
                     style: {
                       fontSize: '2rem',
+                      color: isMobile ? '#ffff' : '#000000'
                     },
                   }}
                 />
