@@ -1,6 +1,5 @@
-
 import { Suspense, useState, useEffect } from 'react';
-// import { Redirect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Loader from '../../components/Loader';
 import Container from '../../components/Container';
 import SupplierCard from '../../components/SupplierCard';
@@ -11,16 +10,15 @@ import Header from '../../components/Header';
 import suppliers from '../../constants/suppliers';
 import { useStore, useAuthStore } from '../../zustand/store';
 
-
 const LOCAL_STORAGE_KEY_BADGE_COUNT = 'badgeCount';
 
 const HomePage = () => {
   const [isOrderModalOpen, setOrderModalOpen] = useState(false);
   const [selectedSupplier, setSelectedSupplier] = useState(null);
   const [isProductModalOpen, setProductModalOpen] = useState(false);
-  const setBadgeCount = useStore((state) => state.setBadgeCount);
-  const { user, loading } = useAuthStore();
-
+  const setBadgeCount = useStore(state => state.setBadgeCount);
+  const { loading } = useAuthStore();
+  const navigate = useNavigate();
   useEffect(() => {
     if (isProductModalOpen || isOrderModalOpen) {
       document.body.style.overflow = 'hidden';
@@ -29,33 +27,33 @@ const HomePage = () => {
     }
   }, [isProductModalOpen, isOrderModalOpen]);
 
+  // Восстанавливаем badgeCount из localStorage, если он там есть
+  useEffect(() => {
+    const savedBadgeCount = localStorage.getItem(LOCAL_STORAGE_KEY_BADGE_COUNT);
+    const parsedBadgeCount = parseInt(savedBadgeCount, 10);
 
-      // Восстанавливаем badgeCount из localStorage, если он там есть
-      useEffect(() => {
-        const savedBadgeCount = localStorage.getItem(LOCAL_STORAGE_KEY_BADGE_COUNT);
-        const parsedBadgeCount = parseInt(savedBadgeCount, 10);
-      
-        if (!isNaN(parsedBadgeCount)) {
-          useStore.setState({ LOCAL_STORAGE_KEY_BADGE_COUNT: parsedBadgeCount });
-          setBadgeCount(parsedBadgeCount);
-        } else {
-          // Если в локальном хранилище нет значения, установливаем BadgeCount в 0
-          useStore.setState({ LOCAL_STORAGE_KEY_BADGE_COUNT: 0 });
-          setBadgeCount(0);
-        }
-      
-      }, [setBadgeCount]);
+    if (!isNaN(parsedBadgeCount)) {
+      useStore.setState({ LOCAL_STORAGE_KEY_BADGE_COUNT: parsedBadgeCount });
+      setBadgeCount(parsedBadgeCount);
+    } else {
+      // Если в локальном хранилище нет значения, установливаем BadgeCount в 0
+      useStore.setState({ LOCAL_STORAGE_KEY_BADGE_COUNT: 0 });
+      setBadgeCount(0);
+    }
+  }, [setBadgeCount]);
+
+  useEffect(() => {
+    if (!loading) {
+      // Если загрузка завершена, перенаправляем на домашнюю страницу
+      navigate('/home');
+    }
+  }, [loading, navigate]);
 
   if (loading) {
     return <Loader />; // Пока идет загрузка, показываем лоадер
   }
-
-  // if (!user || !user.name) {
-  //   return <Redirect to="/" />;
-  // }
-
   // Обработчик клика по поставщику
-  const handleSupplierClick = (supplier) => {
+  const handleSupplierClick = supplier => {
     setSelectedSupplier(supplier);
     setProductModalOpen(true);
   };
@@ -64,7 +62,6 @@ const HomePage = () => {
   const openOrderModal = () => {
     setOrderModalOpen(true);
     setProductModalOpen(false);
-
   };
 
   // Обработчик закрытия модального окна заказа
@@ -82,7 +79,7 @@ const HomePage = () => {
     <Suspense fallback={<Loader />}>
       <Header onClick={openOrderModal} />
       <Container>
-        {suppliers.map((supplier) => (
+        {suppliers.map(supplier => (
           <SupplierCard
             key={supplier.id}
             name={supplier.name}
@@ -92,8 +89,11 @@ const HomePage = () => {
         ))}
 
         {selectedSupplier && (
-          <ModalForProduct isOpen={isProductModalOpen} onClose={closeSupplierModal}>
-            {selectedSupplier.products.map((product) => (
+          <ModalForProduct
+            isOpen={isProductModalOpen}
+            onClose={closeSupplierModal}
+          >
+            {selectedSupplier.products.map(product => (
               <ProductCard
                 key={product.id}
                 product={product}

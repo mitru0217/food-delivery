@@ -22,7 +22,7 @@ const MobileRegisterForm = () => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setShowForm(isSignUp);
-    }, 500);
+    }, 100);
 
     return () => clearTimeout(timeout);
   }, [isSignUp]);

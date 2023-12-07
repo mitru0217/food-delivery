@@ -11,15 +11,18 @@ import IconButton from '@mui/material/IconButton';
 import theme from '../../../../constants/themeMui';
 import { useAuthStore } from '../../../../zustand/store';
 import FormButton from '../../../Buttons/AnimatedButton';
-import { MdEmail, MdAccountCircle, MdVisibility, MdVisibilityOff  } from "react-icons/md";
-
-
+import {
+  MdEmail,
+  MdAccountCircle,
+  MdVisibility,
+  MdVisibilityOff,
+} from 'react-icons/md';
 
 const SignUpForm = ({ isSignUp, buttonFormVariants }) => {
-  const { user, setUser } = useAuthStore();
+  const { user, register } = useAuthStore(); // Получение данных из хранилища
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const isMobile = useMediaQuery({ maxWidth: 767 })
+  const isMobile = useMediaQuery({ maxWidth: 767 });
 
   const handleClickShowPassword = () => setShowPassword(show => !show);
   const handleMouseDownPassword = event => {
@@ -42,14 +45,18 @@ const SignUpForm = ({ isSignUp, buttonFormVariants }) => {
   });
 
   const onSubmit = async data => {
-    await setUser(data);
-    navigate('/home');
-    console.log(data);
-    console.log(user);
-    reset();
-    clearErrors();
+    try {
+      const { name, email, password } = data;
+      await register(name, email, password); // Вызов метода login из хранилища
+      navigate('/home');
+      reset();
+      clearErrors();
+    } catch (error) {
+      console.error('Error during login:', error);
+      // Обработка ошибок при входе
+    }
   };
- 
+
   return (
     <ThemeProvider theme={theme}>
       <Box
@@ -76,12 +83,12 @@ const SignUpForm = ({ isSignUp, buttonFormVariants }) => {
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
-                 <MdAccountCircle/>
+                        <MdAccountCircle />
                       </InputAdornment>
                     ),
                     style: {
                       fontSize: '2rem',
-                      color: isMobile ? '#ffff' : '#000000'
+                      color: isMobile ? '#ffff' : '#000000',
                     },
                   }}
                 />
@@ -108,12 +115,12 @@ const SignUpForm = ({ isSignUp, buttonFormVariants }) => {
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
-                 <MdEmail/>
+                        <MdEmail />
                       </InputAdornment>
                     ),
                     style: {
                       fontSize: '2rem',
-                      color: isMobile ? '#ffff' : '#000000'
+                      color: isMobile ? '#ffff' : '#000000',
                     },
                   }}
                 />
@@ -147,16 +154,20 @@ const SignUpForm = ({ isSignUp, buttonFormVariants }) => {
                       <InputAdornment position="end">
                         <IconButton
                           aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword} 
+                          onClick={handleClickShowPassword}
                           onMouseDown={handleMouseDownPassword}
                         >
-                          {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
+                          {showPassword ? (
+                            <MdVisibilityOff />
+                          ) : (
+                            <MdVisibility />
+                          )}
                         </IconButton>
                       </InputAdornment>
                     ),
                     style: {
                       fontSize: '2rem',
-                      color: isMobile ? '#ffff' : '#000000'
+                      color: isMobile ? '#ffff' : '#000000',
                     },
                   }}
                 />

@@ -15,8 +15,6 @@ import FormButton from '../../../Buttons/AnimatedButton';
 import SignInForm from '../SignInForm';
 import SignUpForm from '../SignUpForm';
 
-
-
 const RegisterForm = () => {
   const [isSignUp, setIsSignUp] = useState(true);
   const [showForm, setShowForm] = useState(true);
@@ -156,6 +154,7 @@ const RegisterForm = () => {
             <FormText>or use your account</FormText>
             <SignInForm
               isSignUp={isSignUp}
+              toggleSignUpSignIn={toggleSignUpSignIn}
               buttonFormVariants={buttonFormVariants}
             />
           </Wrapper>

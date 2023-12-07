@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useForm, Controller } from 'react-hook-form';
@@ -15,13 +15,13 @@ import IconButton from '@mui/material/IconButton';
 import { MdEmail, MdVisibility, MdVisibilityOff } from 'react-icons/md';
 import baseTheme from '../../../../constants/themeMui';
 
-const SignInForm = ({ isSignUp, buttonFormVariants }) => {
-  const { user } = useAuthStore();
+const SignInForm = ({ isSignUp, toggleSignUpSignIn, buttonFormVariants }) => {
+  const { user, login, checkAuth, isAuth } = useAuthStore(); // Получение данных из хранилища
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const handleClickShowPassword = () => setShowPassword(show => !show);
 
-  const isMobile = useMediaQuery({ maxWidth: 767 })
+  const isMobile = useMediaQuery({ maxWidth: 767 });
   const defaultColor = baseTheme.palette.primary.main;
   const {
     control,
@@ -36,12 +36,42 @@ const SignInForm = ({ isSignUp, buttonFormVariants }) => {
       password: user.password || '',
     },
   });
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      try {
+        await checkAuth(); // Используем метод checkAuth из вашего хранилища
 
-  const onSubmit = data => {
-    navigate('/home');
-    console.log(data);
-    reset();
-    clearErrors();
+        // Проверяем обновленные данные пользователя
+        if (isAuth) {
+          navigate('/home');
+          reset();
+          clearErrors();
+        }
+      } catch (error) {
+        console.error('Error checking authentication:', error);
+        // Обработка ошибок при проверке авторизации
+      }
+    };
+
+    checkAuthentication();
+  }, [checkAuth, navigate, reset, clearErrors, isAuth]);
+  const onSubmit = async data => {
+    try {
+      const { email, password } = data;
+      await login(email, password); // Вызов метода login из хранилища
+      // Проверяем, есть ли данные пользователя после входа
+      if (!isAuth) {
+        // Если данных пользователя нет, вызываем функцию переключения формы SignUp
+        toggleSignUpSignIn();
+        return;
+      }
+      navigate('/home');
+      reset();
+      clearErrors();
+    } catch (error) {
+      console.error('Error during login:', error);
+      // Обработка ошибок при входе
+    }
   };
 
   return (
@@ -159,6 +189,7 @@ SignInForm.propTypes = {
   onSubmit: PropTypes.func,
   isSignUp: PropTypes.bool,
   buttonFormVariants: PropTypes.object,
+  toggleSignUpSignIn: PropTypes.func,
 };
 
 export default SignInForm;

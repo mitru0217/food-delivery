@@ -15,15 +15,15 @@ export const HeaderStyled = styled.header`
 export const HeaderContainer = styled.div`
 display: flex;
 justify-content: space-between;
+gap:1rem;
 align-items: center;
 padding: 2rem;
 `
 export const BtnWrapper = styled.div`
-  width: 30rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-
+gap: 1rem;
   @media screen and (min-width: ${p => p.theme.breakpoints[2]}) {
     width: 50rem;
   }
