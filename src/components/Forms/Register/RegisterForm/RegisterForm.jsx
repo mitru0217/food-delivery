@@ -177,16 +177,16 @@ const RegisterForm = () => {
       >
         {showOverlay ? (
           <div>
-            <OverlayHeading>Hello Friend</OverlayHeading>
+            <OverlayHeading>Hello, Friend</OverlayHeading>
             <OverlayText>
-              Enter your personal details and start journey with us
+              Create your account and start journey with us
             </OverlayText>
           </div>
         ) : (
           <div>
             <OverlayHeading>Welcome Back!</OverlayHeading>
             <OverlayText>
-              Keep connected with us please login with your personal info
+              If your have an account keep connected with us. Please login.
             </OverlayText>
           </div>
         )}

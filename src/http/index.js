@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 export const API_URL = `http://localhost:5000/api`;
+// export const API_URL = import.meta.env.VITE_API_URL;
 
 const api = axios.create({
   withCredentials: true,
@@ -25,7 +26,7 @@ api.interceptors.response.use(
     ) {
       originalRequest._isRetry = true;
       try {
-        const response = await axios.get(`${API_URL}/refresh`, {
+        const response = await axios.get('http://localhost:5000/api/refresh', {
           withCredentials: true,
         });
         localStorage.setItem('token', response.data.accessToken);
@@ -38,3 +39,12 @@ api.interceptors.response.use(
   }
 );
 export default api;
+
+//originalRequest._isRetry = true; в данном контексте устанавливает флаг _isRetry в объекте originalRequest.
+//Этот флаг используется для контроля повторной попытки запроса. Когда Axios выполняет запрос и получает ответ с
+//ошибкой 401, это может быть интерпретировано как необходимость обновления токена (или выполнение другой логики
+//для повторной попытки запроса). Флаг _isRetry помогает предотвратить бесконечные циклы повторных запросов.
+
+//Когда установлен флаг _isRetry в true, это служит сигналом для интерсептора (в данном случае), чтобы он знал,
+//что запрос уже был попыткой повторения после получения ошибки 401. Это позволяет избежать бесконечной попытки
+//повторения запроса, если что-то пошло не так при обновлении токена или в других случаях.

@@ -1,4 +1,4 @@
-import { Suspense, useState, useEffect } from 'react';
+import { Suspense, useState, useEffect, useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Loader from '../../components/Loader';
 import Container from '../../components/Container';
@@ -16,9 +16,11 @@ const HomePage = () => {
   const [isOrderModalOpen, setOrderModalOpen] = useState(false);
   const [selectedSupplier, setSelectedSupplier] = useState(null);
   const [isProductModalOpen, setProductModalOpen] = useState(false);
+  const [redirected, setRedirected] = useState(false);
   const setBadgeCount = useStore(state => state.setBadgeCount);
   const { loading } = useAuthStore();
   const navigate = useNavigate();
+
   useEffect(() => {
     if (isProductModalOpen || isOrderModalOpen) {
       document.body.style.overflow = 'hidden';
@@ -26,6 +28,28 @@ const HomePage = () => {
       document.body.style.overflow = 'visible';
     }
   }, [isProductModalOpen, isOrderModalOpen]);
+  // логикa проверки токена и статуса аутентификации
+  const checkAuthentication = () => {
+    const token = localStorage.getItem('token');
+    const isAuth = localStorage.getItem('isAuth') === 'true';
+    return { token, isAuth };
+  };
+
+  useLayoutEffect(() => {
+    const { token, isAuth } = checkAuthentication();
+
+    if (!isAuth && !loading && !redirected) {
+      setRedirected(true);
+      // Если пользователь не аутентифицирован, перенаправляем его на страницу входа
+      navigate('/');
+    }
+
+    if (token && isAuth && !loading && !redirected) {
+      setRedirected(true);
+      useAuthStore.setState({ isAuth: true });
+      navigate('/home');
+    }
+  }, [navigate, loading, redirected]);
 
   // Восстанавливаем badgeCount из localStorage, если он там есть
   useEffect(() => {
@@ -41,13 +65,6 @@ const HomePage = () => {
       setBadgeCount(0);
     }
   }, [setBadgeCount]);
-
-  useEffect(() => {
-    if (!loading) {
-      // Если загрузка завершена, перенаправляем на домашнюю страницу
-      navigate('/home');
-    }
-  }, [loading, navigate]);
 
   if (loading) {
     return <Loader />; // Пока идет загрузка, показываем лоадер
@@ -111,3 +128,16 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
+// Почему применён useLayoutEffect: когда просто набираешь в браузере адрес  http://localhost:5173/home,
+// при использовании useEffect было секундное открытие HomePage, а затем уже происходил редирект на "/".
+// Различие между useEffect и useLayoutEffect заключается во времени их выполнения во время жизненного цикла
+// компонента.
+// useEffect выполняется после того, как DOM обновлен и браузер уже отобразил изменения на странице.
+// Поэтому при использовании useEffect, браузер мог видеть короткую миграцию страницы, прежде чем произойдет
+// перенаправление.
+// С другой стороны, useLayoutEffect выполняется перед тем, как браузер отобразит изменения на странице.
+// Он срабатывает синхронно с обновлением DOM. Используя useLayoutEffect, мы можем избежать момента отображения
+// компонента до срабатывания проверок и перенаправлений.
+// В нашем случае, использование useLayoutEffect позволяет удержать перенаправление до того момента,
+// когда все проверки аутентификации будут выполнены.

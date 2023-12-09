@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { useAuthStore } from '../../zustand/store';
 import Avatar from '../Avatar/Avatar';
 import {
   Greeting,
@@ -7,9 +6,12 @@ import {
   GreetingWrapper,
 } from './UserProfile.styled';
 import LogOut from '../LogOut/LogOut';
-export const UserProfile = ({ avatarUrl }) => {
-  const { user } = useAuthStore();
 
+export const UserProfile = ({ avatarUrl }) => {
+  // Получение данных пользователя из localStorage после перезагрузки страницы
+  const storedUser = localStorage.getItem('user');
+  // Парсинг сохраненного объекта пользователя из localStorage
+  const user = storedUser ? JSON.parse(storedUser) : {};
   return (
     <ProfileContainer>
       <GreetingWrapper>

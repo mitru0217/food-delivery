@@ -16,7 +16,7 @@ import { MdEmail, MdVisibility, MdVisibilityOff } from 'react-icons/md';
 import baseTheme from '../../../../constants/themeMui';
 
 const SignInForm = ({ isSignUp, toggleSignUpSignIn, buttonFormVariants }) => {
-  const { user, login, checkAuth, isAuth } = useAuthStore(); // Получение данных из хранилища
+  const { user, login, isAuth } = useAuthStore(); // Получение данных из хранилища
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const handleClickShowPassword = () => setShowPassword(show => !show);
@@ -39,8 +39,6 @@ const SignInForm = ({ isSignUp, toggleSignUpSignIn, buttonFormVariants }) => {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        await checkAuth(); // Используем метод checkAuth из вашего хранилища
-
         // Проверяем обновленные данные пользователя
         if (isAuth) {
           navigate('/home');
@@ -54,7 +52,8 @@ const SignInForm = ({ isSignUp, toggleSignUpSignIn, buttonFormVariants }) => {
     };
 
     checkAuthentication();
-  }, [checkAuth, navigate, reset, clearErrors, isAuth]);
+  }, [navigate, reset, clearErrors, isAuth]);
+
   const onSubmit = async data => {
     try {
       const { email, password } = data;

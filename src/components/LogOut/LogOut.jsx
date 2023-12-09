@@ -3,20 +3,15 @@ import { useAuthStore } from '../../zustand/store';
 import { LogOutButton } from './LogOut.styled';
 
 const LogOut = () => {
-  const { logOut } = useAuthStore();
+  const { logout } = useAuthStore();
   const navigate = useNavigate();
 
   const handleLogOut = () => {
-    logOut();
-    navigate('/'); 
+    logout();
+    navigate('/');
   };
 
-  return (
-    <LogOutButton
-      onClick={handleLogOut}>
-      Log Out
-    </LogOutButton>
-  );
+  return <LogOutButton onClick={handleLogOut}>Log Out</LogOutButton>;
 };
 
 export default LogOut;
