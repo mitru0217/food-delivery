@@ -1,53 +1,66 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuthStore } from '../../zustand/store';
-import { Thumb, Img, RemoveIcon, AvatarIcon } from './Avatar.styled';
+import AvatarThumbnail from '../AvatarThumbnail/AvatarThumbnail';
+
 const Avatar = () => {
-  const { user, setAvatar, removeAvatar } = useAuthStore((state) => ({
+  const [avatarFromLocalStorage, setAvatarFromLocalStorage] = useState(null);
+  const { user, setAvatar, loadingAvatar } = useAuthStore(state => ({
     user: state.user,
     setAvatar: state.setAvatar,
-    removeAvatar: state.removeAvatar
+    loadingAvatar: state.loadingAvatar,
   }));
-  const [preview, setPreview] = useState(null);
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setAvatar(reader.result);
-        setPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
+  const handleSubmit = event => {
+    event.preventDefault();
+
+    const fileInput = document.getElementById('avatar-upload');
+    if (fileInput.files.length > 0) {
+      const formData = new FormData();
+      formData.append('avatar', fileInput.files[0]);
+      setAvatar(formData); // Отправка файла на бэкенд для загрузки
     }
   };
 
-  const handleRemoveAvatar = () => {
-    removeAvatar();
-    setPreview(null);
+  const handleFileChange = event => {
+    const file = event.target.files[0];
+
+    if (file) {
+      const formData = new FormData();
+      formData.append('avatar', file);
+      setAvatar(formData);
+    }
   };
+  useEffect(() => {
+    const avatarFromLocalStorage = localStorage.getItem('avatar');
+    if (avatarFromLocalStorage) {
+      // Если есть аватар в localStorage, сохраняем его во временное состояние
+      setAvatarFromLocalStorage(avatarFromLocalStorage);
+    }
+  }, []);
   return (
     <>
       <label htmlFor="avatar-upload" style={{ cursor: 'pointer' }}>
-        {preview ? (
-        <Thumb onClick={handleRemoveAvatar}>
-        <Img src={preview} alt="Preview" />
-        <RemoveIcon className="remove-icon" size={20} color="#ff0000" />
-        </Thumb>
-        
-      ) : (
-        <Thumb>
-        <AvatarIcon />
-        </Thumb>
-        
-      )}
-        <input
-          id="avatar-upload"
-          type="file"
-          onChange={handleFileChange}
-          accept="image/png, image/jpeg"
-          style={{ display: 'none' }} // Скрываем элемент input
+        <AvatarThumbnail
+          loading={loadingAvatar}
+          user={user}
+          avatarFromLocalStorage={avatarFromLocalStorage}
         />
+        <form
+          action="/avatar"
+          method="patch"
+          encType="multipart/form-data"
+          onSubmit={handleSubmit}
+        >
+          <input
+            id="avatar-upload"
+            type="file"
+            name="avatar"
+            onChange={handleFileChange}
+            accept="image/png, image/jpeg"
+            style={{ display: 'none' }} // Скрываем элемент input
+          />
+          <button type="submit" style={{ display: 'none' }} />
+        </form>
       </label>
     </>
   );

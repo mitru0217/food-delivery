@@ -2,11 +2,14 @@ import { create } from 'zustand';
 import AuthService from '../services/AdminService';
 import axios from 'axios';
 import { API_URL } from '../http';
+import api from '../http';
 
 export const useAuthStore = create(set => ({
   user: {},
   loading: false,
+  loadingAvatar: false,
   isAuth: false,
+  avatar: null,
 
   setIsAuth: isAuth => {
     set({ isAuth });
@@ -19,6 +22,7 @@ export const useAuthStore = create(set => ({
       localStorage.setItem('user', JSON.stringify(user));
       localStorage.setItem('token', accessToken);
       localStorage.setItem('isAuth', 'true');
+      localStorage.setItem('avatar', user.avatar);
       // Сохранение данных пользователя после успешного входа
       set({ user, isAuth: true, loading: false });
     } catch (error) {
@@ -51,6 +55,7 @@ export const useAuthStore = create(set => ({
       localStorage.removeItem('user');
       localStorage.removeItem('isAuth');
       localStorage.removeItem('badgeCount');
+      localStorage.removeItem('avatar');
       // Выход выполнен успешно - сброс данных пользователя и isAuth
       set({ user: {}, isAuth: false, loading: false });
     } catch (error) {
@@ -61,7 +66,7 @@ export const useAuthStore = create(set => ({
   },
   checkAuth: async () => {
     try {
-      const response = await axios.get(`${API_URL}/refresh`, {
+      const response = await axios.get(`${API_URL}/user/refresh`, {
         withCredentials: true,
       });
 
@@ -76,17 +81,25 @@ export const useAuthStore = create(set => ({
       set({ loading: false });
     }
   },
-  setAvatar: avatar => {
-    set(state => ({
-      user: { ...state.user, avatar },
-      loading: false,
-    }));
-  },
-  removeAvatar: () => {
-    set(state => ({
-      user: { ...state.user, avatar: null },
-      loading: false,
-    }));
+  setAvatar: async formData => {
+    try {
+      set({ loadingAvatar: true });
+      const response = await api.patch('/avatar', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      const { avatarUrl } = response.data;
+      set(state => ({
+        ...state,
+        user: { ...state.user, avatar: avatarUrl },
+        loadingAvatar: false,
+      }));
+      localStorage.setItem('avatar', avatarUrl);
+    } catch (error) {
+      set({ loadingAvatar: false });
+      console.log('Avatar error:', error.message);
+    }
   },
 }));
 
