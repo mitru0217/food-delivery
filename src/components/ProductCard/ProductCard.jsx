@@ -37,18 +37,15 @@
 
 //   const checkIfInCart = useCallback(() => {
 //     const cartItems = JSON.parse(localStorage.getItem('cartItems')) || []
-    
+
 //     // Проверяем, есть ли продукт в корзине
 //     const itemExists = cartItems.some(
 //       cartItem => cartItem.productInfo && cartItem.productInfo.id === product.id
 //     );
 
-
 // setBadgeCount(itemExists ? cartItems.length : 0);
 //     setIsInShoppingCart(itemExists); // обновляем состояние на основе проверки
 //   }, [product.id, setBadgeCount]);
-
-
 
 //   const handleAddToCart = useCallback(() => {
 //     setIsClicked(true);
@@ -86,7 +83,6 @@
 //     setBadgeCount(totalItemsInCart);
 //     setOrderedProducts(cartItems);
 //     setSelectedSuppliers(selectedSupplier);
-   
 
 //     checkIfInCart();
 //   }, [
@@ -108,7 +104,6 @@
 //     );
 //     localStorage.setItem('cartItems', JSON.stringify(updatedItems));
 
-  
 //     localStorage.setItem('badgeCount', cartItems.length - 1);
 //     // Обновляем глобальное состояние
 //     setBadgeCount(cartItems.length - 1);
@@ -143,7 +138,6 @@
 //     // Снимаем подписку при размонтировании компонента
 //     return () => window.removeEventListener('storage', checkIfInCart);
 //   }, [checkIfInCart, isInShoppingCart]);
-
 
 //   return (
 //     <Wrapper>
@@ -212,10 +206,9 @@
 
 // export default ProductCard ;
 
-
-import  { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useStore } from '../../zustand/store';
+import { useStore } from '../../zustand/userStore';
 import {
   Wrapper,
   CardContainer,
@@ -240,7 +233,6 @@ import {
   Contents,
 } from './ProductCard.styled';
 
-
 const LOCAL_STORAGE_KEY_CART = 'cartItems';
 const LOCAL_STORAGE_KEY_BADGE_COUNT = 'badgeCount';
 
@@ -250,9 +242,9 @@ const ProductCard = ({ product, selectedSupplier }) => {
   const [isHoveredForRemove, setIsHoveredForRemove] = useState(false);
   const [quantity, setQuantity] = useState(1);
 
-  const setBadgeCount = useStore((state) => state.setBadgeCount);
-  const setOrderedProducts = useStore((state) => state.setOrderedProducts);
-  const setSelectedSuppliers = useStore((state) => state.setSelectedSuppliers);
+  const setBadgeCount = useStore(state => state.setBadgeCount);
+  const setOrderedProducts = useStore(state => state.setOrderedProducts);
+  const setSelectedSuppliers = useStore(state => state.setSelectedSuppliers);
 
   useEffect(() => {
     const savedBadgeCount = localStorage.getItem(LOCAL_STORAGE_KEY_BADGE_COUNT);
@@ -261,7 +253,7 @@ const ProductCard = ({ product, selectedSupplier }) => {
     if (savedBadgeCount !== null) {
       badgeCountAsNumber = parseInt(savedBadgeCount, 10);
       if (isNaN(badgeCountAsNumber)) {
-        badgeCountAsNumber = 0;  // If parsing failed, default to 0
+        badgeCountAsNumber = 0; // If parsing failed, default to 0
       }
     }
 
@@ -271,10 +263,11 @@ const ProductCard = ({ product, selectedSupplier }) => {
 
   const handleAddToCart = useCallback(() => {
     setIsClicked(true);
-    let cartItems = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_CART)) || [];
+    let cartItems =
+      JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_CART)) || [];
 
     const itemIndex = cartItems.findIndex(
-      (cartItem) => cartItem.productInfo && cartItem.productInfo.id === product.id
+      cartItem => cartItem.productInfo && cartItem.productInfo.id === product.id
     );
 
     if (itemIndex === -1) {
@@ -290,14 +283,19 @@ const ProductCard = ({ product, selectedSupplier }) => {
     }
 
     localStorage.setItem(LOCAL_STORAGE_KEY_CART, JSON.stringify(cartItems));
-    localStorage.setItem(LOCAL_STORAGE_KEY_BADGE_COUNT, JSON.stringify(cartItems.length));
+    localStorage.setItem(
+      LOCAL_STORAGE_KEY_BADGE_COUNT,
+      JSON.stringify(cartItems.length)
+    );
 
-    const totalItemsInCart = cartItems.reduce((total, cartItem) => total + cartItem.quantity, 0);
+    const totalItemsInCart = cartItems.reduce(
+      (total, cartItem) => total + cartItem.quantity,
+      0
+    );
 
     setBadgeCount(totalItemsInCart);
     setOrderedProducts(cartItems);
     setSelectedSuppliers(selectedSupplier);
-
   }, [
     product,
     quantity,
@@ -309,9 +307,11 @@ const ProductCard = ({ product, selectedSupplier }) => {
 
   const handleRemoveFromCart = useCallback(() => {
     setIsClicked(false);
-    let cartItems = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_CART)) || [];
+    let cartItems =
+      JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_CART)) || [];
     const updatedItems = cartItems.filter(
-      (cartItem) => !(cartItem.productInfo && cartItem.productInfo.id === product.id)
+      cartItem =>
+        !(cartItem.productInfo && cartItem.productInfo.id === product.id)
     );
 
     localStorage.setItem(LOCAL_STORAGE_KEY_CART, JSON.stringify(updatedItems));
@@ -340,7 +340,11 @@ const ProductCard = ({ product, selectedSupplier }) => {
               <Info>{product.title}</Info>
               <Info>{product.price}$</Info>
             </LeftDetails>
-            <AddButton type="submit" onClick={handleAddToCart} isClicked={isClicked}>
+            <AddButton
+              type="submit"
+              onClick={handleAddToCart}
+              isClicked={isClicked}
+            >
               <AddIcon />
             </AddButton>
           </Left>
@@ -349,7 +353,10 @@ const ProductCard = ({ product, selectedSupplier }) => {
             onMouseLeave={() => setIsHoveredForRemove(false)}
             isHoveredForRemove={isHoveredForRemove}
           >
-            <RightDone isHoveredForRemove={isHoveredForRemove} isClicked={isClicked}>
+            <RightDone
+              isHoveredForRemove={isHoveredForRemove}
+              isClicked={isClicked}
+            >
               <DoneIcon />
             </RightDone>
             <RightDetails>

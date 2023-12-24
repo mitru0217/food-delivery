@@ -1,4 +1,4 @@
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useForm, Controller } from 'react-hook-form';
 import { ThemeProvider } from '@mui/material/styles';
@@ -13,7 +13,7 @@ import Checkbox from '@mui/material/Checkbox';
 import theme from '../../../../constants/themeMui';
 import CreditCard from '../../../CreditCard/CreditCard';
 import CardNumberMask from '../../../Utils/cardNumberMask';
-import { useFormDataStore } from '../../../../zustand/store';
+import { useFormDataStore } from '../../../../zustand/userStore';
 
 const PaymentForm = ({ onFormSubmitSuccess }) => {
   const { paymentData } = useFormDataStore();
@@ -28,7 +28,9 @@ const PaymentForm = ({ onFormSubmitSuccess }) => {
   const isDesktop = useMediaQuery('(min-width:1000px)');
   const [isChecked, setIsChecked] = useState(false);
   const [isFront, setIsFront] = useState(true);
-  const [cardType, setCardType] = useState(localStorage.getItem('cardType') || null);
+  const [cardType, setCardType] = useState(
+    localStorage.getItem('cardType') || null
+  );
 
   const [securityCode, setSecurityCode] = useState('');
   const {
@@ -50,9 +52,9 @@ const PaymentForm = ({ onFormSubmitSuccess }) => {
 
   useEffect(() => {
     if (cardType) {
-        localStorage.setItem('cardType', cardType);
+      localStorage.setItem('cardType', cardType);
     }
-}, [cardType]);
+  }, [cardType]);
 
   const toggleCard = () => {
     setIsFront(!isFront);

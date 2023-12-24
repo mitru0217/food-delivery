@@ -1,13 +1,13 @@
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../../zustand/store';
+import { useUserStore } from '../../zustand/userStore';
 import { LogOutButton } from './LogOut.styled';
 
 const LogOut = () => {
-  const { logout } = useAuthStore();
+  const { logoutUser } = useUserStore();
   const navigate = useNavigate();
 
   const handleLogOut = () => {
-    logout();
+    logoutUser();
     navigate('/');
   };
 

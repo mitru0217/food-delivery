@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useForm, Controller } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { useMediaQuery } from 'react-responsive';
 import { ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -9,7 +10,7 @@ import CustomTextField from '../../../TextField/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import theme from '../../../../constants/themeMui';
-import { useAuthStore } from '../../../../zustand/store';
+import { useUserStore } from '../../../../zustand/userStore';
 import FormButton from '../../../Buttons/AnimatedButton';
 import {
   MdEmail,
@@ -18,8 +19,8 @@ import {
   MdVisibilityOff,
 } from 'react-icons/md';
 
-const SignUpForm = ({ isSignUp, buttonFormVariants }) => {
-  const { user, register } = useAuthStore(); // Получение данных из хранилища
+const SignUpForm = ({ isSignUp, buttonFormVariants, toggleSignUpSignIn }) => {
+  const { user, registerUser } = useUserStore(); // Получение данных из хранилища
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const isMobile = useMediaQuery({ maxWidth: 767 });
@@ -28,7 +29,7 @@ const SignUpForm = ({ isSignUp, buttonFormVariants }) => {
   const handleMouseDownPassword = event => {
     event.preventDefault();
   };
-
+  const { name, email, password } = user || {};
   const {
     control,
     handleSubmit,
@@ -38,22 +39,31 @@ const SignUpForm = ({ isSignUp, buttonFormVariants }) => {
   } = useForm({
     mode: 'onBlur',
     defaultValues: {
-      name: user.name || '',
-      email: user.email || '',
-      password: user.password || '',
+      name: name || '',
+      email: email || '',
+      password: password || '',
     },
   });
 
-  const onSubmit = async data => {
+  const onSubmit = async (data, event) => {
+    event.preventDefault();
     try {
       const { name, email, password } = data;
-      await register(name, email, password); // Вызов метода login из хранилища
+      await registerUser(name, email, password);
+      const { isAuth, user } = useUserStore.getState();
+      //Проверяем, есть ли пользователь в системе или установлен ли токен доступа
+
+      if (isAuth && user) {
+        toggleSignUpSignIn(); // Вызываем функцию переключения формы
+
+        return;
+      }
+
       navigate('/home');
       reset();
       clearErrors();
     } catch (error) {
-      console.error('Error during login:', error);
-      // Обработка ошибок при входе
+      console.error('Error during registration:', error);
     }
   };
 
@@ -204,6 +214,15 @@ SignUpForm.propTypes = {
   onSubmit: PropTypes.func,
   isSignUp: PropTypes.bool,
   buttonFormVariants: PropTypes.object,
+  toggleSignUpSignIn: PropTypes.func,
 };
 
 export default SignUpForm;
+
+// const { isAuth } = useUserStore.getState(); // Получаем текущее значение isAuth из состояния
+// const isRegistered = await registerUser(name, email, password);
+// if (!isRegistered) {
+//   // Если не удалось зарегистрировать пользователя, переключаем форму
+//   toggleSignUpSignIn();
+//   return;
+// }

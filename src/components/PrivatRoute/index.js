@@ -1,1 +1,3 @@
-export { default } from './PrivatRoute';
+export * from './PrivateRouteAdminKey';
+export * from './PrivateRouteAdmin';
+export * from './PrivateRouteUser';

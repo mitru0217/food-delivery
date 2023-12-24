@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { HeaderStyled, BtnWrapper, HeaderContainer } from './Header.styled';
 import Button from '../Buttons/SecondaryButton';
 import ButtonWithBadge from '../Buttons/ButtonWithBadge/ButtonWithBadge';
-import { useStore } from '../../zustand/store';
+import { useStore } from '../../zustand/userStore';
 import { AiOutlineShoppingCart } from 'react-icons/ai';
 
 import UserProfile from '../UserProfile/UserProfile';

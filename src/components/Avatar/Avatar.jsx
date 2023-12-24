@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useAuthStore } from '../../zustand/store';
+import PropTypes from 'prop-types';
+import { useUserStore } from '../../zustand/userStore';
 import AvatarThumbnail from '../AvatarThumbnail/AvatarThumbnail';
 
-const Avatar = () => {
+const Avatar = ({ avatarUrl }) => {
+  // const { updateUserAvatar, loadingAvatar, avatar, setAvatar } = useUserStore();
   const [avatarFromLocalStorage, setAvatarFromLocalStorage] = useState(null);
-  const { user, setAvatar, loadingAvatar } = useAuthStore(state => ({
+  const { user, updateUserAvatar, loadingAvatar } = useUserStore(state => ({
     user: state.user,
-    setAvatar: state.setAvatar,
+    updateUserAvatar: state.updateUserAvatar,
     loadingAvatar: state.loadingAvatar,
   }));
 
@@ -17,7 +19,7 @@ const Avatar = () => {
     if (fileInput.files.length > 0) {
       const formData = new FormData();
       formData.append('avatar', fileInput.files[0]);
-      setAvatar(formData); // Отправка файла на бэкенд для загрузки
+      updateUserAvatar(formData); // Отправка файла на бэкенд для загрузки
     }
   };
 
@@ -27,22 +29,25 @@ const Avatar = () => {
     if (file) {
       const formData = new FormData();
       formData.append('avatar', file);
-      setAvatar(formData);
+      updateUserAvatar(formData);
     }
   };
   useEffect(() => {
     const avatarFromLocalStorage = localStorage.getItem('avatar');
+    console.log(avatarFromLocalStorage);
     if (avatarFromLocalStorage) {
       // Если есть аватар в localStorage, сохраняем его во временное состояние
       setAvatarFromLocalStorage(avatarFromLocalStorage);
+      // setAvatar(avatarFromLocalStorage);
     }
   }, []);
+
   return (
     <>
       <label htmlFor="avatar-upload" style={{ cursor: 'pointer' }}>
         <AvatarThumbnail
           loading={loadingAvatar}
-          user={user}
+          avatarUrl={avatarUrl}
           avatarFromLocalStorage={avatarFromLocalStorage}
         />
         <form
@@ -66,4 +71,18 @@ const Avatar = () => {
   );
 };
 
+Avatar.propTypes = {
+  avatarUrl: PropTypes.string,
+};
+
 export default Avatar;
+
+// useEffect(() => {
+//   // Обновление avatarUrl, когда avatar меняется в хранилище
+//   if (avatar) {
+//     setAvatarFromLocalStorage(avatar);
+//     // Обновляем avatarUrl в вашем компоненте
+//     // Например:
+//     // updateUserAvatar(avatar); // Предположим, у вас есть функция для обновления avatarUrl в компоненте
+//   }
+// }, [avatar]);

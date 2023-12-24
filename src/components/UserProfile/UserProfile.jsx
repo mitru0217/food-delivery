@@ -6,16 +6,18 @@ import {
   GreetingWrapper,
 } from './UserProfile.styled';
 import LogOut from '../LogOut/LogOut';
+// import { useAuthStore } from '../../../../zustand/store';
 
-export const UserProfile = ({ avatarUrl }) => {
+export const UserProfile = () => {
   // Получение данных пользователя из localStorage после перезагрузки страницы
   const storedUser = localStorage.getItem('user');
   // Парсинг сохраненного объекта пользователя из localStorage
   const user = storedUser ? JSON.parse(storedUser) : {};
+
   return (
     <ProfileContainer>
       <GreetingWrapper>
-        <Avatar avatarUrl={avatarUrl} />
+        <Avatar avatarUrl={user.avatar} />
         <Greeting>Hello, {user.name}!</Greeting>
       </GreetingWrapper>
       <LogOut />

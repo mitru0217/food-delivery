@@ -8,7 +8,7 @@ import ModalForProduct from '../../components/Modals/ModalForProduct';
 import ModalForOrder from '../../components/Modals/ModalForOrder';
 import Header from '../../components/Header';
 import suppliers from '../../constants/suppliers';
-import { useStore, useAuthStore } from '../../zustand/store';
+import { useStore, useUserStore } from '../../zustand/userStore';
 
 const LOCAL_STORAGE_KEY_BADGE_COUNT = 'badgeCount';
 
@@ -18,7 +18,7 @@ const HomePage = () => {
   const [isProductModalOpen, setProductModalOpen] = useState(false);
   const [redirected, setRedirected] = useState(false);
   const setBadgeCount = useStore(state => state.setBadgeCount);
-  const { loading } = useAuthStore();
+  const { loading } = useUserStore();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const HomePage = () => {
 
     if (token && isAuth && !loading && !redirected) {
       setRedirected(true);
-      useAuthStore.setState({ isAuth: true });
+      useUserStore.setState({ isAuth: true });
       navigate('/home');
     }
   }, [navigate, loading, redirected]);

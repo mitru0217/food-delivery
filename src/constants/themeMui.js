@@ -1,5 +1,5 @@
 import { createTheme } from '@mui/material/styles';
-import { green, red, indigo, teal } from '@mui/material/colors';
+import { green, red, indigo, teal, cyan } from '@mui/material/colors';
 
 const baseTheme = createTheme({
   palette: {
@@ -11,6 +11,8 @@ const baseTheme = createTheme({
       text: green[500],
       indigo: indigo[500],
       error: red[500],
+      lightBlue: '#bbdefb',
+      cyan: cyan[100],
     },
   },
   breakpoints: {
@@ -20,7 +22,7 @@ const baseTheme = createTheme({
       desktop: 1000,
     },
   },
-}); // Создайте базовую тему
+});
 
 const theme = createTheme({
   ...baseTheme,

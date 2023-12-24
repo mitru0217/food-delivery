@@ -13,10 +13,10 @@ import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import theme from '../../../../constants/themeMui';
-import { useStore} from '../../../../zustand/store';
+import { useStore } from '../../../../zustand/userStore';
 import Counter from '../../../Counter/Counter';
 
-const CartForm = ({ onFormSubmitSuccess  }) => {
+const CartForm = ({ onFormSubmitSuccess }) => {
   const [cartItems, setCartItems] = useState(
     (JSON.parse(localStorage.getItem('cartItems')) || []).map(item => ({
       ...item,
@@ -24,20 +24,16 @@ const CartForm = ({ onFormSubmitSuccess  }) => {
       totalPriceForProduct: (item.quantity * item.productInfo.price).toFixed(2),
     }))
   );
-  
-
 
   const [isChecked, setIsChecked] = useState(false);
-  
+
   const setBadgeCount = useStore(state => state.setBadgeCount);
   const isTablet = useMediaQuery('(min-width:768px)');
   const isMobile = useMediaQuery(`(max-width: 767px)`);
   const isDesktop = useMediaQuery('(min-width:1000px)');
 
-  const {
-    handleSubmit,
-  } = useForm({
-    confirmData: true
+  const { handleSubmit } = useForm({
+    confirmData: true,
   });
 
   const total = cartItems.reduce(
@@ -82,24 +78,26 @@ const CartForm = ({ onFormSubmitSuccess  }) => {
     setCartItems(updatedCartItems);
     localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
     localStorage.setItem('cartItemsSubmited', JSON.stringify(updatedCartItems));
-      // Обновление badgeCount в глобальном состоянии
-      const updatedBadgeCount = updatedCartItems.reduce((acc, item) => acc + item.quantityBadge, 0);
-      setBadgeCount(updatedBadgeCount);
+    // Обновление badgeCount в глобальном состоянии
+    const updatedBadgeCount = updatedCartItems.reduce(
+      (acc, item) => acc + item.quantityBadge,
+      0
+    );
+    setBadgeCount(updatedBadgeCount);
   };
 
   const onSubmit = () => {
     const updatedCartItems = [...cartItems];
     updatedCartItems.confirmData = true;
     localStorage.setItem('cartItemsSubmited', JSON.stringify(updatedCartItems));
-   
-    onFormSubmitSuccess ();
+
+    onFormSubmitSuccess();
   };
 
   const handleCheckboxChange = e => {
     setIsChecked(e.target.checked);
     if (e.target.checked) {
       handleSubmit(onSubmit)();
-     
     }
   };
 
@@ -250,6 +248,5 @@ const CartForm = ({ onFormSubmitSuccess  }) => {
 CartForm.propTypes = {
   onFormSubmitSuccess: PropTypes.func.isRequired,
 };
-
 
 export default CartForm;

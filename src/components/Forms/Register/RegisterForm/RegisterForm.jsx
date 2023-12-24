@@ -166,6 +166,7 @@ const RegisterForm = () => {
             <SignUpForm
               isSignUp={isSignUp}
               buttonFormVariants={buttonFormVariants}
+              toggleSignUpSignIn={toggleSignUpSignIn}
             />
           </Wrapper>
         )}

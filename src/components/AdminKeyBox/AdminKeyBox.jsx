@@ -14,7 +14,7 @@ import {
 } from './AdminKeyBox.styled';
 
 // const ADMIN_KEY = import.meta.env.VITE_ADMIN_KEY;
-const ADMIN_KEY = 'q9w8e7r6t5y';
+const ADMIN_KEY = '12345';
 
 const AdminKeyBox = () => {
   const [showInput, setShowInput] = useState(false);

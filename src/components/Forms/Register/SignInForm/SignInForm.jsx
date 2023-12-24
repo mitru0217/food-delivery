@@ -7,7 +7,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
 import CustomTextField from '../../../TextField/TextField';
 import theme from '../../../../constants/themeMui';
-import { useAuthStore } from '../../../../zustand/store';
+import { useUserStore } from '../../../../zustand/userStore';
 import FormButton from '../../../Buttons/AnimatedButton';
 import { Box } from '@material-ui/core';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -16,12 +16,14 @@ import { MdEmail, MdVisibility, MdVisibilityOff } from 'react-icons/md';
 import baseTheme from '../../../../constants/themeMui';
 
 const SignInForm = ({ isSignUp, toggleSignUpSignIn, buttonFormVariants }) => {
-  const { user, login, isAuth } = useAuthStore(); // Получение данных из хранилища
+  const { user, loginUser, isAuth } = useUserStore(); // Изменение получения данных из хранилища
+
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const handleClickShowPassword = () => setShowPassword(show => !show);
 
   const isMobile = useMediaQuery({ maxWidth: 767 });
+  const { email, password } = user || {};
   const defaultColor = baseTheme.palette.primary.main;
   const {
     control,
@@ -32,8 +34,8 @@ const SignInForm = ({ isSignUp, toggleSignUpSignIn, buttonFormVariants }) => {
   } = useForm({
     mode: 'onBlur',
     defaultValues: {
-      email: user.email || '',
-      password: user.password || '',
+      email: email || '',
+      password: password || '',
     },
   });
   useEffect(() => {
@@ -57,7 +59,7 @@ const SignInForm = ({ isSignUp, toggleSignUpSignIn, buttonFormVariants }) => {
   const onSubmit = async data => {
     try {
       const { email, password } = data;
-      await login(email, password); // Вызов метода login из хранилища
+      await loginUser(email, password); // Вызов метода login из хранилища
       // Проверяем, есть ли данные пользователя после входа
       if (!isAuth) {
         // Если данных пользователя нет, вызываем функцию переключения формы SignUp

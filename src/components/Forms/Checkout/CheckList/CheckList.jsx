@@ -11,7 +11,7 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import theme from '../../../../constants/themeMui';
 import Button from '@mui/material/Button';
-import { useStore } from '../../../../zustand/store';
+import { useStore } from '../../../../zustand/userStore';
 
 const CheckList = () => {
   const isTablet = useMediaQuery('(min-width:768px) and (max-width:999px)');
@@ -84,9 +84,9 @@ const CheckList = () => {
           padding: '2rem',
         }}
         style={{
-                maxHeight: isMobile || isTablet ? '350px' : 'auto',
-                overflowY: isMobile || isTablet ? 'auto' : 'visible',
-              }}
+          maxHeight: isMobile || isTablet ? '350px' : 'auto',
+          overflowY: isMobile || isTablet ? 'auto' : 'visible',
+        }}
       >
         <Typography variant="h1" sx={{ textAlign: 'center' }}>
           Order summary
@@ -112,123 +112,118 @@ const CheckList = () => {
           ))}
         </List>
         <Divider />
-        {cartItems.length >0 && (
+        {cartItems.length > 0 && (
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Box>
-            <Typography variant="h2">Total Sum:</Typography>
+            <Box>
+              <Typography variant="h2">Total Sum:</Typography>
+            </Box>
+            <Box>
+              <Typography variant="spanSecond" sx={{ fontWeight: '900' }}>
+                {' '}
+                {roundedTotal} $
+              </Typography>
+            </Box>
           </Box>
-          <Box>
-            <Typography variant="spanSecond" sx={{fontWeight: '900'}}> {roundedTotal} $</Typography>
-          </Box>
-        </Box>
         )}
-      
+
         <Divider />
         <Box sx={{ width: '100%' }}>
-        <Grid 
-        container 
-        spacing={2}
-        justifyContent={isMobile ? "start" : "space-around"}
-        >
-          <Grid item xs={12} sm={4} md={4}>
-          <List
-            sx={{
-             
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'start',
-              
-            }}
+          <Grid
+            container
+            spacing={2}
+            justifyContent={isMobile ? 'start' : 'space-around'}
           >
-            <Box>
-              <Typography variant="h2">Customer:</Typography>
-            </Box>
-            <ListItem sx={{ padding: '0' }}>
-              <Typography variant="spanSecond">{name || ''}</Typography>
-            </ListItem>
-            <ListItem sx={{ padding: '0' }}>
-              <Typography variant="spanSecond">
-                tel: {phoneNumber || ''}
-              </Typography>
-            </ListItem>
-          </List>
-          </Grid>
-          <Grid item xs={12} sm={4} md={4}>
-          <List
-            sx={{
-        
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'start',
-             
-            }}
-          >
-            <Box>
-              <Typography variant="h2">Shipping address:</Typography>
-            </Box>
-            <ListItem sx={{ padding: '0' }}>
-              <Typography variant="spanSecond">City: {city || ''}</Typography>
-            </ListItem>
-            <ListItem sx={{ padding: '0' }}>
-              <Typography variant="spanSecond">Str: {street || ''}</Typography>
-            </ListItem>
-            <ListItem sx={{ padding: '0' }}>
-              <Typography variant="spanSecond">
-                House: {number || ''}
-              </Typography>
-            </ListItem>
-          </List>
-          </Grid>
-          <Grid item xs={12} sm={4} md={4}>
-          <List
-            sx={{
-         
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'start',
-              
-            }}
-          >
-            <Box>
-              <Typography variant="h2">Payment Method:</Typography>
-            </Box>
+            <Grid item xs={12} sm={4} md={4}>
+              <List
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'start',
+                }}
+              >
+                <Box>
+                  <Typography variant="h2">Customer:</Typography>
+                </Box>
+                <ListItem sx={{ padding: '0' }}>
+                  <Typography variant="spanSecond">{name || ''}</Typography>
+                </ListItem>
+                <ListItem sx={{ padding: '0' }}>
+                  <Typography variant="spanSecond">
+                    tel: {phoneNumber || ''}
+                  </Typography>
+                </ListItem>
+              </List>
+            </Grid>
+            <Grid item xs={12} sm={4} md={4}>
+              <List
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'start',
+                }}
+              >
+                <Box>
+                  <Typography variant="h2">Shipping address:</Typography>
+                </Box>
+                <ListItem sx={{ padding: '0' }}>
+                  <Typography variant="spanSecond">
+                    City: {city || ''}
+                  </Typography>
+                </ListItem>
+                <ListItem sx={{ padding: '0' }}>
+                  <Typography variant="spanSecond">
+                    Str: {street || ''}
+                  </Typography>
+                </ListItem>
+                <ListItem sx={{ padding: '0' }}>
+                  <Typography variant="spanSecond">
+                    House: {number || ''}
+                  </Typography>
+                </ListItem>
+              </List>
+            </Grid>
+            <Grid item xs={12} sm={4} md={4}>
+              <List
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'start',
+                }}
+              >
+                <Box>
+                  <Typography variant="h2">Payment Method:</Typography>
+                </Box>
 
-            <ListItem sx={{ padding: '0' }}>
-              <Typography variant="spanSecond">
-                Card Number: {cardNumber || ''}
-              </Typography>
-            </ListItem>
-            <ListItem sx={{ padding: '0' }}>
-              <Typography variant="spanSecond">
-                Card Holder: {cardHolderName || ''}
-              </Typography>
-            </ListItem>
-            <ListItem sx={{ padding: '0' }}>
-              <Typography variant="spanSecond">
-                Expiry Date: {expiryDate || ''}
-              </Typography>
-            </ListItem>
-            <ListItem sx={{ padding: '0' }}>
-              <Typography variant="spanSecond">
-                CVV: {cvv || ''}
-              </Typography>
-            </ListItem>
-          </List>
+                <ListItem sx={{ padding: '0' }}>
+                  <Typography variant="spanSecond">
+                    Card Number: {cardNumber || ''}
+                  </Typography>
+                </ListItem>
+                <ListItem sx={{ padding: '0' }}>
+                  <Typography variant="spanSecond">
+                    Card Holder: {cardHolderName || ''}
+                  </Typography>
+                </ListItem>
+                <ListItem sx={{ padding: '0' }}>
+                  <Typography variant="spanSecond">
+                    Expiry Date: {expiryDate || ''}
+                  </Typography>
+                </ListItem>
+                <ListItem sx={{ padding: '0' }}>
+                  <Typography variant="spanSecond">CVV: {cvv || ''}</Typography>
+                </ListItem>
+              </List>
+            </Grid>
           </Grid>
-        </Grid>
-       
-        
-
-      
         </Box>
         <Divider />
         <Typography variant="spanSecond">
-              Check the  details and pay for the order
-              </Typography>
-        <Button 
-        onClick={handleSubmit} 
-        disabled={isButtonDisabled}
-        style={{fontSize: '1.5rem'}}
+          Check the details and pay for the order
+        </Typography>
+        <Button
+          onClick={handleSubmit}
+          disabled={isButtonDisabled}
+          style={{ fontSize: '1.5rem' }}
         >
           Pay and send order
         </Button>

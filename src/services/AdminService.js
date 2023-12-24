@@ -1,16 +1,21 @@
-import api from '../http';
+import apiAdmin from '../http/adminApi';
 
 export default class AdminService {
-  static async login(email, password) {
-    return api.post('/', { email, password, action: 'login' });
+  static async adminLogin(email, password) {
+    return apiAdmin.post('/auth', { email, password, action: 'login' });
   }
-  static async register(name, email, password) {
-    return api.post('/', { name, email, password, action: 'register' });
+  static async adminRegister(name, email, password) {
+    return apiAdmin.post('/auth', {
+      name,
+      email,
+      password,
+      action: 'register',
+    });
   }
-  static async logout() {
-    return api.post('/logout');
+  static async adminLogout() {
+    return apiAdmin.post('/logout');
   }
   static async fetchUsers() {
-    return api.get('/users');
+    return apiAdmin.get('/users');
   }
 }

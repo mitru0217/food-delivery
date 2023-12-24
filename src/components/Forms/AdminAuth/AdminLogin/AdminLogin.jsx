@@ -1,32 +1,27 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useForm, Controller } from 'react-hook-form';
 import { ThemeProvider } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import CustomTextField from '../../../TextField/TextField';
+import Stack from '@mui/material/Stack';
+import { Box } from '@material-ui/core';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
+import { MdEmail, MdVisibility, MdVisibilityOff } from 'react-icons/md';
+
+import CustomTextField from '../../../TextField/TextField';
 import theme from '../../../../constants/themeMui';
+import baseTheme from '../../../../constants/themeMui';
 import useAdminStore from '../../../../zustand/adminStore';
 import FormButton from '../../../Buttons/AnimatedButton';
-import {
-  MdEmail,
-  MdAccountCircle,
-  MdVisibility,
-  MdVisibilityOff,
-} from 'react-icons/md';
 
-const AdminSignUp = () => {
-  const { register } = useAdminStore(); // Получение данных из хранилища
+const AdminLogin = () => {
+  const { user, login, isAuth } = useAdminStore(); // Получение данных из хранилища
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-
   const handleClickShowPassword = () => setShowPassword(show => !show);
-  const handleMouseDownPassword = event => {
-    event.preventDefault();
-  };
 
+  const defaultColor = baseTheme.palette.primary.main;
   const {
     control,
     handleSubmit,
@@ -36,71 +31,51 @@ const AdminSignUp = () => {
   } = useForm({
     mode: 'onBlur',
     defaultValues: {
-      name: '',
+      // email: email || '',
+      // password: password || '',
       email: '',
       password: '',
     },
   });
 
+  useEffect(() => {
+    // Проверяем обновленные данные пользователя
+    if (isAuth) {
+      reset();
+      clearErrors();
+      // navigate('/admin/dashboard');
+    }
+  }, [reset, clearErrors, isAuth]);
+
   const onSubmit = async data => {
     try {
-      const { name, email, password } = data;
-      const response = await register(name, email, password);
-      console.log(response);
+      const { email, password } = data;
+      await login(email, password); // Вызов метода login из хранилища
+      // Проверяем, есть ли данные пользователя после входа
+      if (!user) {
+        alert('Create Account');
+        return;
+      }
       navigate('/admin/dashboard');
       reset();
       clearErrors();
     } catch (error) {
       console.error('Error during login:', error);
-      // Обработка ошибок при входе
     }
   };
 
   return (
     <ThemeProvider theme={theme}>
-      <Box
+      <Stack
         spacing={2}
         sx={{
           display: 'flex',
           flexDirection: 'column',
           textAlign: 'center',
           justifyContent: 'center',
-          gap: '2rem',
         }}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Box>
-            <Controller
-              name="name"
-              control={control}
-              render={({ field }) => (
-                <CustomTextField
-                  {...field}
-                  label="Name"
-                  error={!!errors.name}
-                  helperText={errors.name && 'Please enter your name'}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <MdAccountCircle />
-                      </InputAdornment>
-                    ),
-                    style: {
-                      fontSize: '2rem',
-                      color: '#000000',
-                    },
-                  }}
-                />
-              )}
-              rules={{
-                required: 'This field is required',
-                pattern: {
-                  value: /^[A-Za-z\s]*$/,
-                  message: 'Only letters and spaces are allowed',
-                },
-              }}
-            />
-          </Box>
           <Box>
             <Controller
               name="email"
@@ -109,6 +84,7 @@ const AdminSignUp = () => {
                 <CustomTextField
                   {...field}
                   label="Email"
+                  labelStyle={{ color: defaultColor }}
                   error={!!errors.email}
                   helperText={errors.email && 'Please enter a valid email'}
                   InputProps={{
@@ -142,6 +118,7 @@ const AdminSignUp = () => {
                   {...field}
                   label="Password"
                   type={showPassword ? 'text' : 'password'}
+                  labelStyle={{ color: defaultColor }}
                   error={!!errors.password}
                   minLength={8}
                   helperText={
@@ -154,7 +131,6 @@ const AdminSignUp = () => {
                         <IconButton
                           aria-label="toggle password visibility"
                           onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
                         >
                           {showPassword ? (
                             <MdVisibilityOff />
@@ -180,6 +156,7 @@ const AdminSignUp = () => {
               }}
             />
           </Box>
+
           <FormButton
             style={{
               color: '#ffffff',
@@ -189,19 +166,38 @@ const AdminSignUp = () => {
             disabled={!isValid}
             onClick={handleSubmit}
           >
-            Sign Up
+            Log In
           </FormButton>
         </form>
-      </Box>
+      </Stack>
     </ThemeProvider>
   );
 };
 
-AdminSignUp.propTypes = {
+AdminLogin.propTypes = {
   data: PropTypes.object,
   onSubmit: PropTypes.func,
   isSignUp: PropTypes.bool,
   buttonFormVariants: PropTypes.object,
+  toggleSignUpSignIn: PropTypes.func,
 };
 
-export default AdminSignUp;
+export default AdminLogin;
+
+// useEffect(() => {
+//   const checkAuthentication = async () => {
+//     try {
+//       // Проверяем обновленные данные пользователя
+//       if (isAuth) {
+//         navigate('/admin/dashboard');
+//         reset();
+//         clearErrors();
+//       }
+//     } catch (error) {
+//       console.error('Error checking authentication:', error);
+//       // Обработка ошибок при проверке авторизации
+//     }
+//   };
+
+//   checkAuthentication();
+// }, [navigate, reset, clearErrors, isAuth]);
