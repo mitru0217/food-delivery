@@ -26,6 +26,7 @@ const baseTheme = createTheme({
 
 const theme = createTheme({
   ...baseTheme,
+
   typography: {
     h1: {
       fontSize: '2rem',

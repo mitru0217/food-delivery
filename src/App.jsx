@@ -42,7 +42,7 @@ const App = () => {
               />
             }
           />
-          {/* <Route path="/admin/dashboard" element={<AdminPage />} /> */}
+
           <Route
             path="/admin/dashboard"
             element={

@@ -43,7 +43,6 @@ const AdminLogin = () => {
     if (isAuth) {
       reset();
       clearErrors();
-      // navigate('/admin/dashboard');
     }
   }, [reset, clearErrors, isAuth]);
 

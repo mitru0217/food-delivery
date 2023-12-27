@@ -6,9 +6,11 @@ import {
   GreetingWrapper,
 } from './UserProfile.styled';
 import LogOut from '../LogOut/LogOut';
+import { useUserStore } from '../../zustand/userStore';
 // import { useAuthStore } from '../../../../zustand/store';
 
 export const UserProfile = () => {
+  const { logoutUser } = useUserStore();
   // Получение данных пользователя из localStorage после перезагрузки страницы
   const storedUser = localStorage.getItem('user');
   // Парсинг сохраненного объекта пользователя из localStorage
@@ -20,7 +22,7 @@ export const UserProfile = () => {
         <Avatar avatarUrl={user.avatar} />
         <Greeting>Hello, {user.name}!</Greeting>
       </GreetingWrapper>
-      <LogOut />
+      <LogOut logoutFunction={logoutUser} redirectPath="/" />
     </ProfileContainer>
   );
 };
