@@ -14,16 +14,7 @@ const Dashboard = () => {
   };
   return (
     <ThemeProvider theme={theme}>
-      <Box
-        display={'flex'}
-        sx={{
-          width: openDrawer ? 'calc(100% - 300px)' : '100%',
-          marginLeft: openDrawer ? '300px' : '0',
-          transition: 'width 1s ease-in-out , margin-left 1s ease-in-out',
-        }}
-      >
-        <Header toggleDrawer={toggleDrawer} />
-      </Box>
+      <Header toggleDrawer={toggleDrawer} />
       <Box
         sx={{
           transition: openDrawer

@@ -6,7 +6,7 @@ import AvatarThumbnail from '../AvatarThumbnail/AvatarThumbnail';
 const Avatar = ({ avatarUrl }) => {
   // const { updateUserAvatar, loadingAvatar, avatar, setAvatar } = useUserStore();
   const [avatarFromLocalStorage, setAvatarFromLocalStorage] = useState(null);
-  const { user, updateUserAvatar, loadingAvatar } = useUserStore(state => ({
+  const { updateUserAvatar, loadingAvatar } = useUserStore(state => ({
     user: state.user,
     updateUserAvatar: state.updateUserAvatar,
     loadingAvatar: state.loadingAvatar,

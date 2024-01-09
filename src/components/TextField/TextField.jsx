@@ -16,6 +16,7 @@ const CustomTextField = forwardRef(
       onChange,
       labelStyle,
       endAdornment,
+      InputLabelProps,
       ...props
     },
     ref
@@ -50,6 +51,7 @@ const CustomTextField = forwardRef(
                   fontSize: error ? '1.5rem' : '2rem',
                   ...labelStyle,
                   color: determineLabelColor(),
+                  ...(InputLabelProps?.style || {}), // Используем стиль метки из InputLabelProps
                 }}
               >
                 {label || (error ? 'Error' : 'Search Field')}
@@ -97,5 +99,6 @@ CustomTextField.propTypes = {
   labelStyle: PropTypes.object,
   endAdornment: PropTypes.node,
   InputProps: PropTypes.object,
+  InputLabelProps: PropTypes.object,
 };
 export default CustomTextField;

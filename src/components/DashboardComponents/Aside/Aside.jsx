@@ -16,7 +16,7 @@ const Aside = ({ openDrawer }) => {
         width: 300,
         height: '100%',
         flexShrink: 0,
-        marginTop: '-8rem',
+        marginTop: '8rem',
         '& .MuiDrawer-paper': {
           width: 300,
           boxSizing: 'border-box',
@@ -38,6 +38,10 @@ const Aside = ({ openDrawer }) => {
       </Box>
     </Drawer>
   );
+};
+
+Aside.propTypes = {
+  openDrawer: PropTypes.bool.isRequired,
 };
 
 export default Aside;

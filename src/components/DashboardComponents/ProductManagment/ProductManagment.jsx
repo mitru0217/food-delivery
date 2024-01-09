@@ -15,12 +15,29 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import CategoryIcon from '@mui/icons-material/Category';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import BasicPopover from '../Popover/Popover';
+import AddingForm from '../AddingForm';
 
 const ProductManagment = () => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+
   const handleClick = () => {
     setOpen(!open);
+    // Устанавливаем якорь для всплывающего окна
   };
+
+  const handleClickPopover = event => {
+    setOpen(open);
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  // const open = Boolean(anchorEl);
+
   return (
     <Paper elevation={0} style={{ width: '100%' }}>
       <List sx={{ bgcolor: '#193044', fontSize: '4rem' }}>
@@ -64,7 +81,7 @@ const ProductManagment = () => {
           </ListItemButton>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItemButton sx={{ pl: 3 }}>
+              <ListItemButton onClick={handleClickPopover} sx={{ pl: 3 }}>
                 <ListItemIcon>
                   <AddCircleIcon
                     sx={{
@@ -82,6 +99,18 @@ const ProductManagment = () => {
                   }}
                 />
               </ListItemButton>
+              <BasicPopover
+                anchorEl={anchorEl}
+                handleClose={handleClose}
+                popoverContent={AddingForm}
+                anchorPosition={{ top: 290, left: 350 }}
+              >
+                <AddingForm
+                  fieldLabel="Category"
+                  fieldNameImg="categoryImg"
+                  fieldName="category"
+                />
+              </BasicPopover>
               <ListItemButton sx={{ pl: 3 }}>
                 <ListItemIcon>
                   <RemoveCircleIcon

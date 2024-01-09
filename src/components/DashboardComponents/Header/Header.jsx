@@ -19,7 +19,12 @@ const Header = ({ toggleDrawer }) => {
         padding: '1rem 5rem',
         borderBottom: '2px solid #ffff',
       }}
-      style={{ width: '100%', height: '8rem', background: '#24292e' }}
+      style={{
+        width: '100%',
+        height: '8rem',
+        marginBottom: '-8rem',
+        background: '#24292e',
+      }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <IconButton
